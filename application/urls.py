@@ -2,8 +2,14 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('create-application/', views.create_application, name='create_application'),
-    path('get-application/', views.get_application, name='get_application'),
-    path('update-application/', views.update_application, name='update_application'),
-    path('delete-application/', views.delete_application, name='delete_application'),
+    path('create-document/', views.create_document, name='create_document'),
+    path('get-document/', views.get_document, name='get_document'),
+    path('get-documents/', views.get_documents, name='get_documents'),
+    path('update-document/', views.update_document, name='update_document'),
+    path('delete-document/', views.delete_document, name='delete_document'),
+    path('create-applicant/', views.create_applicant, name='create_applicant'),
+    path('get-applicant/', views.get_applicant, name='get_applicant'),
+    path('get-applicants/', views.get_applicants, name='get_applicants'),
+    path('update-applicant/', views.update_applicant, name='update_applicant'),
+    path('delete-applicant/', views.delete_applicant, name='delete_applicant'),
 ]

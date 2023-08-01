@@ -2,8 +2,59 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from application.serializers import ApplicantListSerializer, ApplicantSerializer
-from .models import Applicant
+from application.serializers import ApplicantListSerializer, ApplicantSerializer, DocumentSerializer
+from .models import Applicant, Document
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def create_document(request):
+    title = request.POST['title']
+    file = request.FILES['file']
+
+    document = Document.objects.create(title=title, file=file)
+    document.save()
+
+    return Response({"success": "Document created successfully"}, status=status.HTTP_201_CREATED)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_documents(request):
+    documents = Document.objects.all()
+    serializer = DocumentSerializer(documents, many =True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_document(request):
+    id = request.GET.get("id")
+    document = Document.objects.get(id=id)
+    serializer = DocumentSerializer(document)
+    return Response(serializer.data)
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def update_document(request):
+    id = request.GET.get("id")
+
+    document = Document.objects.get(id=id)
+    title = request.POST['title']
+    file = request.FILES.get('file', document.file)
+
+    document.title = title
+    document.file = file
+    document.save()
+
+    return Response({"success": "Document updated successfully"}, status=status.HTTP_200_OK)
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_document(request):
+    id = request.GET.get("id")
+    applicant = Applicant.objects.get(id=id)
+    applicant.delete()
+    return Response({"success": "Applicant deleted successfully"})
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -30,6 +81,7 @@ def create_applicant(request):
     other_language = request.POST.get('other_language')
     interested_country = request.POST['interested_country']
     interested_course = request.POST['interested_course']
+    documents = request.FILES.getlist('documents')
 
     applicant = Applicant.objects.create(
         applicant_purpose=applicant_purpose,
@@ -55,6 +107,8 @@ def create_applicant(request):
         interested_country=interested_country,
         interested_course=interested_course
     )
+    applicant.documents.set(documents)  
+
     applicant.save()
 
     return Response({"success": "Applicant created successfully"})
@@ -70,7 +124,7 @@ def get_applicants(request):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def get_applicants(request):
+def get_applicant(request):
     id = request.GET.get("id")
     applicant = Applicant.objects.get(id=id)
     serializer = ApplicantSerializer(applicant)
@@ -106,6 +160,7 @@ def update_applicant(request):
     interested_country = request.POST.get('interested_country')
     interested_course = request.POST.get('interested_course')
     new_status = request.POST.get('status')
+    documents = request.FILES.getlist('documents')
 
     current_status = applicant.status
     allowed_status_transitions = {
@@ -152,18 +207,15 @@ def update_applicant(request):
     applicant.status = new_status
     applicant.save()
 
+    applicant.documents.set(documents)  
+
     return Response({"success": "Applicant updated successfully"})
     
-
-
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated])
 def delete_applicant(request):
-    user = request.user
     id = request.GET.get("id")
-    if user.role in ['Admin', 'Agent']:
-        applicant = Applicant.objects.get(id=id)
-        applicant.delete()
-        return Response({"success": "Applicant deleted successfully"})
-    else:
-        return Response({"error": "Unauthorized for deleting the applicant"}, status=status.HTTP_401_UNAUTHORIZED)
+    applicant = Applicant.objects.get(id=id)
+    applicant.delete()
+    return Response({"success": "Applicant deleted successfully"})
+    

@@ -1,5 +1,13 @@
-from .models import Applicant
+from .models import Applicant, Document
 from rest_framework import serializers
+
+
+
+
+class DocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Document
+        fields = '__all__'
 
 
 class ApplicantSerializer(serializers.ModelSerializer):
