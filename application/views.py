@@ -115,7 +115,7 @@ def create_applicant(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def get_applicants(request):
     applicant = Applicant.objects.all()
     serializer = ApplicantListSerializer(applicant, many =True)

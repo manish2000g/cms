@@ -27,7 +27,6 @@ class CustomAuthToken(ObtainAuthToken):
                 'email': user.email,
                 'first_name': user.first_name,
                 'last_name': user.last_name,
-                'role': user.role
             }   
         },status=200)
     
@@ -77,7 +76,6 @@ def create_user_profile(request):
     email = request.POST['email']
     password = request.POST['password']
     username = request.POST['username']
-    user_type = request.POST.get('user_type', 'is_student')
 
     # Check if email already exists
     if UserProfile.objects.filter(email=email).exists():
@@ -87,9 +85,6 @@ def create_user_profile(request):
     if UserProfile.objects.filter(username=username).exists():
         return Response({'detail': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
 
-    # Check if all required fields are present
-    if not all([first_name, last_name, email, password, username, user_type]):
-        return Response({'detail': 'All required fields are not present'}, status=status.HTTP_400_BAD_REQUEST)
 
     user_profile = UserProfile.objects.create(
         username=username,
@@ -97,7 +92,6 @@ def create_user_profile(request):
         password=password,
         first_name=first_name,
         last_name=last_name,
-        role=user_type
     )
     user_profile.save()
     message = f'Hello,\n\nThank you for signing up for Consultancy Management System! To get started, please click on the following link to verify your account : https://esan.hikingbees.com/api/verify-user-profile/?user={user.id} \n\nBest regards,\nESAN'
@@ -112,6 +106,7 @@ def create_user_profile(request):
     return Response({'success': 'User profile created successfully'}, status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_user_profile(request):
     user = request.user
     data = {
@@ -120,7 +115,6 @@ def get_user_profile(request):
             'email': user.email,
             'first_name': user.first_name,
             'last_name': user.last_name,
-            'role': user.role,
         }
     }
 

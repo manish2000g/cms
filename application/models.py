@@ -72,4 +72,25 @@ class EnglishProficiency(models.Model):
     def __str__(self):
         return f"{self.student.full_name}'s {self.test_name} - Score: {self.test_score}"
 
-    
+
+
+class Payment(models.Model):
+    STATUS_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Completed', 'Completed'),
+        ('Cancelled', 'Cancelled'),
+    )
+
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+    description = models.CharField(max_length=255)
+    date = models.DateField()
+    grand_total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    remaining_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    action = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"Payment for {self.applicant.full_name}"
+
+
+
