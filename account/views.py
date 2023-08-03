@@ -63,7 +63,7 @@ class ChangePasswordView(generics.UpdateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def get_user_profile_detail(request):
     user = request.user
     user_ser = UserProfileDetailSerializer(user)
@@ -106,7 +106,7 @@ def create_user_profile(request):
     return Response({'success': 'User profile created successfully'}, status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def get_user_profile(request):
     user = request.user
     data = {

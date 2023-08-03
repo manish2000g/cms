@@ -18,7 +18,6 @@ def create_document(request):
     return Response({"success": "Document created successfully"}, status=status.HTTP_201_CREATED)
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
 def get_documents(request):
     documents = Document.objects.all()
     serializer = DocumentSerializer(documents, many =True)
@@ -26,7 +25,6 @@ def get_documents(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
 def get_document(request):
     id = request.GET.get("id")
     document = Document.objects.get(id=id)
@@ -115,7 +113,6 @@ def create_applicant(request):
 
 
 @api_view(["GET"])
-# @permission_classes([IsAuthenticated])
 def get_applicants(request):
     applicant = Applicant.objects.all()
     serializer = ApplicantListSerializer(applicant, many =True)
@@ -123,7 +120,6 @@ def get_applicants(request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
 def get_applicant(request):
     id = request.GET.get("id")
     applicant = Applicant.objects.get(id=id)

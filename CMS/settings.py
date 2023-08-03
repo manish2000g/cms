@@ -32,9 +32,9 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-CSRF_TRUSTED_ORIGINS =['https://00f5-103-163-182-160.ngrok-free.app', 'http://localhost:8084']
+CSRF_TRUSTED_ORIGINS =['https://dee8-103-163-182-160.ngrok-free.app', 'http://localhost:8084']
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8084", 'https://00f5-103-163-182-160.ngrok-free.app'
+    "http://localhost:8084", 'https://dee8-103-163-182-160.ngrok-free.app'
 ]
 
 CORS_ALLOW_METHODS = [
@@ -59,6 +59,7 @@ CORS_ALLOW_HEADERS = [
 
 
 INSTALLED_APPS = [
+    'corsheaders',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -71,7 +72,6 @@ INSTALLED_APPS = [
     'account',
     'provider',
     'application',
-    'corsheaders',
     'service',
 ]
 
@@ -174,7 +174,7 @@ MEDIA_ROOT = Path(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 
