@@ -17,7 +17,6 @@ class Service(models.Model):
   )
     name = models.CharField(max_length=100, choices=SERVICE_CHOICES)
     description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
     duration = models.CharField(max_length=50)
 
     def __str__(self):
@@ -57,7 +56,7 @@ class Country(models.Model):
 
     def __str__(self):
         return self.name
-    
+  
 
 class Course(models.Model):
     COURSE_TYPE_CHOICES = (
@@ -75,6 +74,20 @@ class Course(models.Model):
     application_deadline = models.DateField()
     course_website = models.URLField(max_length=200, blank=True)
     course_image = models.ImageField(upload_to='course_images/', blank=True)
+
+    def __str__(self):
+        return self.name
+
+class Institution(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    courses = models.ManyToManyField(Course, related_name='institutions')
+    website = models.URLField(max_length=200, blank=True)
+    contact_email = models.EmailField(max_length=100, blank=True)
+    contact_phone = models.CharField(max_length=20, blank=True)
+    address = models.CharField(max_length=150, blank=True)
+    logo = models.ImageField(upload_to='institution_logos/', blank=True)
 
     def __str__(self):
         return self.name
@@ -136,3 +149,19 @@ class Event(models.Model):
     def __str__(self):
         return self.name
 
+class Commission(models.Model):
+    INCOME_SOURCES = (
+        ('Admission Commission', 'Admission Commission'),
+        ('Visa Processing Commission', 'Visa Processing Commission'),
+        ('Other', 'Other'),
+    )
+
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
+    income_date = models.DateField()
+    income_source = models.CharField(max_length=100, choices=INCOME_SOURCES, default='Other')
+    commission_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    agent = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.income_source} from {self.institution.name} ({self.country.name})"

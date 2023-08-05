@@ -1,5 +1,7 @@
 from django.db import models
 
+from service.models import Country, Course, Institution
+
 class Document(models.Model):
     title = models.CharField(max_length=75)
     file = models.FileField(upload_to='applicant_documents/')
@@ -24,7 +26,7 @@ class Applicant(models.Model):
         ('Inquiring', 'Inquiring'),
         ('Class Enrollment', 'Class Enrollment'),
         ('Abroad Enrollment', 'Abroad Enrollment')
-    )
+    ) 
     ACADEMIC_SCORE_CHOICE = (
         ('Percentage', 'Percentage'),
         ('GPA', 'GPA')
@@ -44,34 +46,20 @@ class Applicant(models.Model):
     academic_score_category = models.CharField(max_length=20, choices=ACADEMIC_SCORE_CHOICE)
     academic_score = models.DecimalField(max_digits=5, decimal_places=2)
     address = models.CharField(max_length=150)    
-    ielts_score = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
-    toefl_score = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
-    pte_score = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
-    gre_score = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
-    sat_score = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
-    other_language = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
-    interested_country = models.CharField(max_length=50)
-    interested_course = models.CharField(max_length=255)
+    ielts_score = models.DecimalField(max_digits=5, decimal_places=2,null=True, blank=True)
+    toefl_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    pte_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    gre_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    gmat_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    sat_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    other_language = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    interested_country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    interested_course = models.ForeignKey(Course, on_delete=models.CASCADE)
     documents = models.ManyToManyField(Document)
+    interested_institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     
     def __str__(self):
         return f"Application of {self.full_name}"
-
-
-class EnglishProficiency(models.Model):
-    TEST_CHOICES = (
-        ('IELTS', 'IELTS'),
-        ('PTE', 'PTE'),
-        ('TOEFL', 'TOEFL')
-    )
-    student = models.ForeignKey(Applicant, on_delete=models.CASCADE)
-    test_name = models.CharField(max_length=10, choices=TEST_CHOICES)
-    test_score = models.DecimalField(max_digits=5, decimal_places=2)
-    test_date = models.DateField()
-
-    def __str__(self):
-        return f"{self.student.full_name}'s {self.test_name} - Score: {self.test_score}"
-
 
 
 class Payment(models.Model):
