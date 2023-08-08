@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',include('account.urls')),
     path('api/',include('application.urls')),
-    # path('api/',include('provider.urls')),
+    path('api/',include('service.urls')),
 
 ]
 

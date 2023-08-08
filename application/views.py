@@ -10,8 +10,8 @@ from .models import Applicant, Document
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def create_document(request):
-    title = request.POST.get['title']
-    file = request.FILES['file']
+    title = request.POST.get('title')
+    file = request.FILES('file')
 
     document = Document.objects.create(title=title, file=file)
     document.save()
@@ -39,7 +39,7 @@ def update_document(request):
     id = request.GET.get("id")
 
     document = Document.objects.get(id=id)
-    title = request.POST.get['title']
+    title = request.POST.get('title')
     file = request.FILES.get('file', document.file)
 
     document.title = title
@@ -80,15 +80,15 @@ def create_applicant(request):
     gmat_score = request.POST.get('gmat_score')
     sat_score = request.POST.get('sat_score')
     other_language = request.POST.get('other_language')
-    interested_country_id = request.POST.get('interested_country')
-    interested_course_id = request.POST.get('interested_course')
+    interested_country_name = request.POST.get('interested_country')
+    interested_course_name = request.POST.get('interested_course')
     documents = request.FILES.getlist('documents')
-    interested_institution_id = request.POST.get('interested_institution')
+    interested_institution_name = request.POST.get('interested_institution')
 
     try:
-        interested_country = Country.objects.get(id=interested_country_id)
-        interested_course = Course.objects.get(id=interested_course_id)
-        interested_institution = Institution.objects.get(id=interested_institution_id)
+        interested_country = Country.objects.get(name=interested_country_name)
+        interested_course = Course.objects.get(name=interested_course_name)
+        interested_institution = Institution.objects.get(name=interested_institution_name)
     except (Country.DoesNotExist, Course.DoesNotExist, Institution.DoesNotExist):
         return Response({"error": "Invalid country, course, or institution provided."}, status=400)
 
