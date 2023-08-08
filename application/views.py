@@ -57,7 +57,7 @@ def delete_document(request):
     return Response({"success": "Applicant deleted successfully"})
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def create_applicant(request):
     applicant_purpose = request.POST['applicant_purpose']
     full_name = request.POST['full_name']
