@@ -82,7 +82,7 @@ class Institution(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    # courses = models.ManyToManyField(Course, related_name='institutions')
+    courses = models.ManyToManyField(Course, related_name='institutions')
     website = models.URLField(max_length=200, blank=True)
     contact_email = models.EmailField(max_length=100, blank=True)
     contact_phone = models.CharField(max_length=20, blank=True)

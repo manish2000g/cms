@@ -78,7 +78,7 @@ def create_applicant(request):
     sat_score = request.POST.get('sat_score')
     other_language = request.POST.get('other_language')
     interested_country = request.POST['interested_country']
-    # interested_course = request.POST['interested_course']
+    interested_course = request.POST['interested_course']
     documents = request.FILES.getlist('documents')
 
     applicant = Applicant.objects.create(
@@ -103,7 +103,7 @@ def create_applicant(request):
         sat_score=sat_score,
         other_language=other_language,
         interested_country=interested_country,
-        # interested_course=interested_course
+        interested_course=interested_course
     )
     applicant.documents.set(documents)  
 

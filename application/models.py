@@ -54,7 +54,7 @@ class Applicant(models.Model):
     sat_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     other_language = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     interested_country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    # interested_course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    interested_course = models.ForeignKey(Course, on_delete=models.CASCADE)
     documents = models.ManyToManyField(Document)
     interested_institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     

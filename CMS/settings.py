@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework',
     'account',
+    'ckeditor',
     'provider',
     'application',
     'service',
