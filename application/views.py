@@ -59,20 +59,20 @@ def delete_document(request):
 @api_view(["POST"])
 # @permission_classes([IsAuthenticated])
 def create_applicant(request):
-    applicant_purpose = request.POST['applicant_purpose']
-    full_name = request.POST['full_name']
-    phone_number = request.POST['phone_number']
-    email = request.POST['email']
-    dob = request.POST['dob']
-    institution = request.POST['institution']
-    degree_title = request.POST['degree_title']
-    degree_level = request.POST['degree_level']
-    passed_year = request.POST['passed_year']
-    course_start_date = request.POST['course_start_date']
-    course_end_date = request.POST['course_end_date']
-    academic_score_category = request.POST['academic_score_category']
-    academic_score = request.POST['academic_score']
-    address = request.POST['address']
+    applicant_purpose = request.POST.get['applicant_purpose']
+    full_name = request.POST.get['full_name']
+    phone_number = request.POST.get['phone_number']
+    email = request.POST.get['email']
+    dob = request.POST.get['dob']
+    institution = request.POST.get['institution']
+    degree_title = request.POST.get['degree_title']
+    degree_level = request.POST.get['degree_level']
+    passed_year = request.POST.get['passed_year']
+    course_start_date = request.POST.get['course_start_date']
+    course_end_date = request.POST.get['course_end_date']
+    academic_score_category = request.POST.get['academic_score_category']
+    academic_score = request.POST.get['academic_score']
+    address = request.POST.get['address']
     ielts_score = request.POST.get('ielts_score')
     toefl_score = request.POST.get('toefl_score')
     pte_score = request.POST.get('pte_score')
@@ -80,10 +80,10 @@ def create_applicant(request):
     gmat_score = request.POST.get('gmat_score')
     sat_score = request.POST.get('sat_score')
     other_language = request.POST.get('other_language')
-    interested_country_id = request.POST['interested_country']
-    interested_course_id = request.POST['interested_course']
+    interested_country_id = request.POST.get['interested_country']
+    interested_course_id = request.POST.get['interested_course']
     documents = request.FILES.getlist('documents')
-    interested_institution_id = request.POST['interested_institution']
+    interested_institution_id = request.POST.get['interested_institution']
 
     try:
         interested_country = Country.objects.get(id=interested_country_id)
