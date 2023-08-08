@@ -1,4 +1,4 @@
-from .models import Applicant, Document
+from .models import Applicant, Document, Payment
 from rest_framework import serializers
 
 
@@ -23,3 +23,8 @@ class ApplicantListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Applicant
         fields = ['id', 'full_name', 'phone_number', 'email', 'degree_title', 'degree_level', 'academic_score', 'address', 'interested_country', 'interested_course', 'interested_institution']
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = '__all__'

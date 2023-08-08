@@ -2,16 +2,17 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from application.serializers import ApplicantListSerializer, ApplicantSerializer, DocumentSerializer
+from application.serializers import ApplicantListSerializer, ApplicantSerializer, DocumentSerializer, PaymentSerializer
 from service.models import Country, Course, Institution
-from .models import Applicant, Document
+from .models import Applicant, Document, Payment
+
 
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def create_document(request):
     title = request.POST.get('title')
-    file = request.FILES('file')
+    file = request.FILES.get('file')
 
     document = Document.objects.create(title=title, file=file)
     document.save()
@@ -80,15 +81,15 @@ def create_applicant(request):
     gmat_score = request.POST.get('gmat_score')
     sat_score = request.POST.get('sat_score')
     other_language = request.POST.get('other_language')
-    interested_country_name = request.POST.get('interested_country')
-    interested_course_name = request.POST.get('interested_course')
+    interested_country_id = request.POST.get('interested_country_id')
+    interested_course_id = request.POST.get('interested_course_id')
     documents = request.FILES.getlist('documents')
-    interested_institution_name = request.POST.get('interested_institution')
+    interested_institution_id = request.POST.get('interested_institution_id')
 
     try:
-        interested_country = Country.objects.get(name=interested_country_name)
-        interested_course = Course.objects.get(name=interested_course_name)
-        interested_institution = Institution.objects.get(name=interested_institution_name)
+        interested_country = Country.objects.get(id=interested_country_id)
+        interested_course = Course.objects.get(id=interested_course_id)
+        interested_institution = Institution.objects.get(id=interested_institution_id)
     except (Country.DoesNotExist, Course.DoesNotExist, Institution.DoesNotExist):
         return Response({"error": "Invalid country, course, or institution provided."}, status=400)
 
@@ -150,35 +151,35 @@ def update_applicant(request, applicant_id):
     except Applicant.DoesNotExist:
         return Response({"error": "Applicant not found"}, status=404)
 
-    applicant_purpose = request.POST.get('applicant_purpose', applicant.applicant_purpose)
-    full_name = request.POST.get('full_name', applicant.full_name)
-    phone_number = request.POST.get('phone_number', applicant.phone_number)
-    email = request.POST.get('email', applicant.email)
-    dob = request.POST.get('dob', applicant.dob)
-    institution = request.POST.get('institution', applicant.institution)
-    degree_title = request.POST.get('degree_title', applicant.degree_title)
-    degree_level = request.POST.get('degree_level', applicant.degree_level)
-    passed_year = request.POST.get('passed_year', applicant.passed_year)
-    course_start_date = request.POST.get('course_start_date', applicant.course_start_date)
-    course_end_date = request.POST.get('course_end_date', applicant.course_end_date)
-    academic_score_category = request.POST.get('academic_score_category', applicant.academic_score_category)
-    academic_score = request.POST.get('academic_score', applicant.academic_score)
-    address = request.POST.get('address', applicant.address)
-    ielts_score = request.POST.get('ielts_score', applicant.ielts_score)
-    toefl_score = request.POST.get('toefl_score', applicant.toefl_score)
-    pte_score = request.POST.get('pte_score', applicant.pte_score)
-    gre_score = request.POST.get('gre_score', applicant.gre_score)
-    gmat_score = request.POST.get('gmat_score', applicant.gmat_score)
-    sat_score = request.POST.get('sat_score', applicant.sat_score)
-    other_language = request.POST.get('other_language', applicant.other_language)
-    interested_country_id = request.POST.get('interested_country', applicant.interested_country_id)
-    interested_course_id = request.POST.get('interested_course', applicant.interested_course_id)
-    interested_institution_id = request.POST.get('interested_institution', applicant.interested_institution_id)
+    applicant_purpose = request.POST.get('applicant_purpose')
+    full_name = request.POST.get('full_name')
+    phone_number = request.POST.get('phone_number',)
+    email = request.POST.get('email')
+    dob = request.POST.get('dob',)
+    institution = request.POST.get('institution')
+    degree_title = request.POST.get('degree_title')
+    degree_level = request.POST.get('degree_level')
+    passed_year = request.POST.get('passed_year')
+    course_start_date = request.POST.get('course_start_date')
+    course_end_date = request.POST.get('course_end_date')
+    academic_score_category = request.POST.get('academic_score_category')
+    academic_score = request.POST.get('academic_score')
+    address = request.POST.get('address')
+    ielts_score = request.POST.get('ielts_score')
+    toefl_score = request.POST.get('toefl_score')
+    pte_score = request.POST.get('pte_score')
+    gre_score = request.POST.get('gre_score')
+    gmat_score = request.POST.get('gmat_score')
+    sat_score = request.POST.get('sat_score')
+    other_language = request.POST.get('other_language')
+    interested_country_name = request.POST.get('interested_country')
+    interested_course_name = request.POST.get('interested_course')
+    interested_institution_name = request.POST.get('interested_institution')
 
     try:
-        interested_country = Country.objects.get(id=interested_country_id)
-        interested_course = Course.objects.get(id=interested_course_id)
-        interested_institution = Institution.objects.get(id=interested_institution_id)
+        interested_country = Country.objects.get(name=interested_country_name)
+        interested_course = Course.objects.get(name=interested_course_name)
+        interested_institution = Institution.objects.get(ame=interested_institution_name)
     except (Country.DoesNotExist, Course.DoesNotExist, Institution.DoesNotExist):
         return Response({"error": "Invalid country, course, or institution provided."}, status=400)
 
@@ -220,3 +221,105 @@ def delete_applicant(request):
     applicant.delete()
     return Response({"success": "Applicant deleted successfully"})
     
+
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def create_payment(request):
+    applicant_id = request.POST.get('applicant_id')
+    description = request.POST.get('description')
+    date = request.POST.get('date')
+    grand_total_amount = request.POST.get('grand_total_amount')
+    remaining_amount = request.POST.get('remaining_amount')
+    status = request.POST.get('status')
+    action = request.POST.get('action')
+
+    try:
+        applicant = Applicant.objects.get(id=applicant_id)
+    except Applicant.DoesNotExist:
+        return Response({"error": "Applicant does not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+    payment = Payment.objects.create(
+        applicant=applicant,
+        description=description,
+        date=date,
+        grand_total_amount=grand_total_amount,
+        remaining_amount=remaining_amount,
+        status=status,
+        action=action
+    )
+    payment.save()
+    return Response({"success": "Payment created successfully"}, status=status.HTTP_201_CREATED)
+
+
+@api_view(["GET"])
+def get_payments(request):
+    payments = Payment.objects.all()
+    serializer = PaymentSerializer(payments, many=True)
+    return Response({
+        "payments": serializer.data
+    })
+
+@api_view(["GET"])
+def get_payment(request):
+    id = request.GET.get("id")
+    applicant = Applicant.objects.get(id=id)
+
+    try:
+        payment = Payment.objects.filter(applicant=applicant)
+        serializer = PaymentSerializer(payment)
+        return Response(serializer.data)
+    except Payment.DoesNotExist:
+        return Response({"error": "Payment not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def update_payment(request):
+    payment_id = request.POST.get("payment_id")
+
+    try:
+        payment = Payment.objects.get(id=payment_id)
+    except Payment.DoesNotExist:
+        return Response({"error": "Payment not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    try:
+        applicant_id = request.POST.get('applicant_id')
+        description = request.POST.get('description')
+        date = request.POST.get('date')
+        grand_total_amount = request.POST.get('grand_total_amount')
+        remaining_amount = request.POST.get('remaining_amount')
+        status = request.POST.get('status')
+        action = request.POST.get('action')
+
+        try:
+            applicant = Applicant.objects.get(id=applicant_id)
+        except Applicant.DoesNotExist:
+            return Response({"error": "Applicant does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+        payment.applicant = applicant
+        payment.description = description
+        payment.date = date
+        payment.grand_total_amount = grand_total_amount
+        payment.remaining_amount = remaining_amount
+        payment.status = status
+        payment.action = action
+
+        payment.save()
+
+        return Response({"success": "Payment updated successfully"}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete_payment(request):
+    id = request.GET.get("id")
+    try:
+        payment = Payment.objects.get(id=id)
+        payment.delete()
+        return Response({"success": "Payment deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+    except Payment.DoesNotExist:
+        return Response({"error": "Payment not found."}, status=status.HTTP_404_NOT_FOUND)

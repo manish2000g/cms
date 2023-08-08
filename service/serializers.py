@@ -15,4 +15,4 @@ class CourseSerializer(serializers.ModelSerializer):
 class InstitutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Institution
-        fields = ['name']
+        fields = 'name'
