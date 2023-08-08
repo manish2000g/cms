@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from application.serializers import ApplicantListSerializer, ApplicantSerializer, DocumentSerializer
+from service.models import Country, Course, Institution
 from .models import Applicant, Document
 
 
@@ -21,7 +22,8 @@ def create_document(request):
 def get_documents(request):
     documents = Document.objects.all()
     serializer = DocumentSerializer(documents, many =True)
-    return Response(serializer.data)
+    return Response({
+        "documents": serializer.data})
 
 
 @api_view(["GET"])
@@ -75,11 +77,20 @@ def create_applicant(request):
     toefl_score = request.POST.get('toefl_score')
     pte_score = request.POST.get('pte_score')
     gre_score = request.POST.get('gre_score')
+    gmat_score = request.POST.get('gmat_score')
     sat_score = request.POST.get('sat_score')
     other_language = request.POST.get('other_language')
-    interested_country = request.POST['interested_country']
-    interested_course = request.POST['interested_course']
+    interested_country_id = request.POST['interested_country']
+    interested_course_id = request.POST['interested_course']
     documents = request.FILES.getlist('documents')
+    interested_institution_id = request.POST['interested_institution']
+
+    try:
+        interested_country = Country.objects.get(id=interested_country_id)
+        interested_course = Course.objects.get(id=interested_course_id)
+        interested_institution = Institution.objects.get(id=interested_institution_id)
+    except (Country.DoesNotExist, Course.DoesNotExist, Institution.DoesNotExist):
+        return Response({"error": "Invalid country, course, or institution provided."}, status=400)
 
     applicant = Applicant.objects.create(
         applicant_purpose=applicant_purpose,
@@ -100,23 +111,27 @@ def create_applicant(request):
         toefl_score=toefl_score,
         pte_score=pte_score,
         gre_score=gre_score,
+        gmat_score=gmat_score,
         sat_score=sat_score,
         other_language=other_language,
         interested_country=interested_country,
-        interested_course=interested_course
+        interested_course=interested_course,
+        interested_institution=interested_institution
     )
     applicant.documents.set(documents)  
-
     applicant.save()
 
-    return Response({"success": "Applicant created successfully"})
+    return Response({"success": "Applicant created successfully"}, status=201)
+
 
 
 @api_view(["GET"])
 def get_applicants(request):
     applicant = Applicant.objects.all()
     serializer = ApplicantListSerializer(applicant, many =True)
-    return Response(serializer.data)
+    return Response({
+        'applicants': serializer.data
+    })
 
 
 @api_view(["GET"])
@@ -127,56 +142,45 @@ def get_applicant(request):
     return Response(serializer.data)
 
 
-@api_view(["POST"])
+@api_view(["PUT"])
 @permission_classes([IsAuthenticated])
-def update_applicant(request):
-    id = request.GET.get("id")
+def update_applicant(request, applicant_id):
+    try:
+        applicant = Applicant.objects.get(id=applicant_id)
+    except Applicant.DoesNotExist:
+        return Response({"error": "Applicant not found"}, status=404)
 
-    applicant = Applicant.objects.get(id=id)
-    applicant_purpose = request.POST.get('applicant_purpose')
-    full_name = request.POST.get('full_name')
-    phone_number = request.POST.get('phone_number')
-    email = request.POST.get('email')
-    dob = request.POST.get('dob')
-    institution = request.POST.get('institution')
-    degree_title = request.POST.get('degree_title')
-    degree_level = request.POST.get('degree_level')
-    passed_year = request.POST.get('passed_year')
-    course_start_date = request.POST.get('course_start_date')
-    course_end_date = request.POST.get('course_end_date')
-    academic_score_category = request.POST.get('academic_score_category')
-    academic_score = request.POST.get('academic_score')
-    address = request.POST.get('address')
-    ielts_score = request.POST.get('ielts_score')
-    toefl_score = request.POST.get('toefl_score')
-    pte_score = request.POST.get('pte_score')
-    gre_score = request.POST.get('gre_score')
-    sat_score = request.POST.get('sat_score')
-    other_language = request.POST.get('other_language')
-    interested_country = request.POST.get('interested_country')
-    interested_course = request.POST.get('interested_course')
-    new_status = request.POST.get('status')
-    documents = request.FILES.getlist('documents')
+    applicant_purpose = request.data.get('applicant_purpose', applicant.applicant_purpose)
+    full_name = request.data.get('full_name', applicant.full_name)
+    phone_number = request.data.get('phone_number', applicant.phone_number)
+    email = request.data.get('email', applicant.email)
+    dob = request.data.get('dob', applicant.dob)
+    institution = request.data.get('institution', applicant.institution)
+    degree_title = request.data.get('degree_title', applicant.degree_title)
+    degree_level = request.data.get('degree_level', applicant.degree_level)
+    passed_year = request.data.get('passed_year', applicant.passed_year)
+    course_start_date = request.data.get('course_start_date', applicant.course_start_date)
+    course_end_date = request.data.get('course_end_date', applicant.course_end_date)
+    academic_score_category = request.data.get('academic_score_category', applicant.academic_score_category)
+    academic_score = request.data.get('academic_score', applicant.academic_score)
+    address = request.data.get('address', applicant.address)
+    ielts_score = request.data.get('ielts_score', applicant.ielts_score)
+    toefl_score = request.data.get('toefl_score', applicant.toefl_score)
+    pte_score = request.data.get('pte_score', applicant.pte_score)
+    gre_score = request.data.get('gre_score', applicant.gre_score)
+    gmat_score = request.data.get('gmat_score', applicant.gmat_score)
+    sat_score = request.data.get('sat_score', applicant.sat_score)
+    other_language = request.data.get('other_language', applicant.other_language)
+    interested_country_id = request.data.get('interested_country', applicant.interested_country_id)
+    interested_course_id = request.data.get('interested_course', applicant.interested_course_id)
+    interested_institution_id = request.data.get('interested_institution', applicant.interested_institution_id)
 
-    current_status = applicant.status
-    allowed_status_transitions = {
-        'Interested': ['Created'],
-        'Created': ['Submitted'],
-        'Submitted': ['Offer', 'Rejected'],
-        'Offer': ['Visa Created', 'Rejected'],
-        'Visa Created': ['Visa Submitted'],
-        'Visa Submitted': ['Docs Requested', 'Granted'],
-        'Docs Requested': ['Granted'],
-        'Granted': ['Enrolled'],
-        'Rejected': [],
-        'Enrolled': [],
-    }
-
-    if current_status not in allowed_status_transitions:
-        return Response({"error": "Invalid current status"}, status=status.HTTP_400_BAD_REQUEST)
-
-    if new_status not in allowed_status_transitions[current_status]:
-        return Response({"error": "Invalid status transition"}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        interested_country = Country.objects.get(id=interested_country_id)
+        interested_course = Course.objects.get(id=interested_course_id)
+        interested_institution = Institution.objects.get(id=interested_institution_id)
+    except (Country.DoesNotExist, Course.DoesNotExist, Institution.DoesNotExist):
+        return Response({"error": "Invalid country, course, or institution provided."}, status=400)
 
     applicant.applicant_purpose = applicant_purpose
     applicant.full_name = full_name
@@ -196,16 +200,17 @@ def update_applicant(request):
     applicant.toefl_score = toefl_score
     applicant.pte_score = pte_score
     applicant.gre_score = gre_score
+    applicant.gmat_score = gmat_score
     applicant.sat_score = sat_score
     applicant.other_language = other_language
     applicant.interested_country = interested_country
     applicant.interested_course = interested_course
-    applicant.status = new_status
+    applicant.interested_institution = interested_institution
+
     applicant.save()
 
-    applicant.documents.set(documents)  
+    return Response({"success": "Applicant updated successfully"}, status=200)
 
-    return Response({"success": "Applicant updated successfully"})
     
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated])
