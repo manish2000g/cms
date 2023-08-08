@@ -19,4 +19,4 @@ class ApplicantSerializer(serializers.ModelSerializer):
 class ApplicantListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Applicant
-        fields = ['full_name', 'phone_number', 'email', 'degree_title', 'degree_level', 'academic_score', 'address', 'interested_country', 'interested_course']
+        fields = ['full_name', 'phone_number', 'email', 'degree_title', 'degree_level', 'academic_score', 'address', 'interested_country']
