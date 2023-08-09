@@ -87,13 +87,13 @@ class Country(models.Model):
         ('Edinburgh', 'Edinburgh'),
     )
     
-    name = models.CharField(max_length=100, choices=COUNTRY_CHOICES)
+    country_name = models.CharField(max_length=100, choices=COUNTRY_CHOICES)
     major_city = models.CharField(max_length=100, choices=MAJOR_CITIES)
     description = models.TextField(blank=True)
     visa_requirements = models.TextField(blank=True)
 
     def __str__(self):
-        return self.name
+        return self.country_name
   
 
 class Course(models.Model):
@@ -105,7 +105,7 @@ class Course(models.Model):
         ('Short Course', 'Short Course'),
     )
 
-    name = models.CharField(max_length=255)
+    course_name = models.CharField(max_length=255)
     description = RichTextField()
     course_start_date = models.DateField()
     course_end_date = models.DateField()
@@ -114,10 +114,10 @@ class Course(models.Model):
     course_image = models.ImageField(upload_to='course_images/', blank=True)
 
     def __str__(self):
-        return self.name
+        return self.course_name
 
 class Institution(models.Model):
-    name = models.CharField(max_length=255)
+    institution_name = models.CharField(max_length=255)
     description = models.TextField()
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     courses = models.ManyToManyField(Course, related_name='institutions')
@@ -128,7 +128,7 @@ class Institution(models.Model):
     logo = models.ImageField(upload_to='institution_logos/', blank=True)
 
     def __str__(self):
-        return self.name
+        return self.institution_name
 
 
 class Enquiry(models.Model):

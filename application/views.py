@@ -82,17 +82,14 @@ def create_applicant(request):
     gmat_score = request.POST.get('gmat_score')
     sat_score = request.POST.get('sat_score')
     other_language = request.POST.get('other_language')
-    country_id = request.POST.get('interested_country')
-    course_id = request.POST.get('interested_course')
+    country_name = request.POST.get('interested_country')
+    course_name = request.POST.get('interested_course')
     documents = request.FILES.getlist('documents')
-    institution_id = request.POST.get('interested_institution')
+    institution_name = request.POST.get('interested_institution')
 
-    try:
-        interested_country = Country.objects.get(id=country_id)
-        interested_course = Course.objects.get(id=course_id)
-        interested_institution = Institution.objects.get(id=institution_id)
-    except (Country.DoesNotExist, Course.DoesNotExist, Institution.DoesNotExist):
-        return Response({"error": "Invalid country, course, or institution provided."}, status=400)
+    interested_course = Course.objects.get(course_name=course_name)
+    interested_country = Country.objects.get(country_name=country_name)
+    interested_institution = Institution.objects.get(institution_name=institution_name)
 
     applicant = Applicant.objects.create(
         applicant_purpose=applicant_purpose,
