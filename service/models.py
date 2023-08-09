@@ -1,6 +1,5 @@
 from django.db import models
 from ckeditor.fields import RichTextField
-
 from account.models import UserProfile
 
 class Service(models.Model):
@@ -18,6 +17,8 @@ class Service(models.Model):
     name = models.CharField(max_length=100, choices=SERVICE_CHOICES)
     description = models.TextField()
     duration = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -36,6 +37,7 @@ class ClassSchedule(models.Model):
     duration = models.PositiveIntegerField()  # Duration in days or weeks
     start_date = models.DateField()
     end_date = models.DateField()
+    # time = models.TimeField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     max_capacity = models.PositiveIntegerField()
     schedule = models.CharField(max_length=255)  # E.g., Monday to Friday, 9:00 AM - 1:00 PM
@@ -49,8 +51,44 @@ class ClassSchedule(models.Model):
 
 
 class Country(models.Model):
-    name = models.CharField(max_length=100)
-    major_cities = models.CharField(max_length=100)
+    COUNTRY_CHOICES = (
+        ('Australia', 'Australia'),
+        ('Canada', 'Canada'),
+        ('New Zealand', 'New Zealand'),
+        ('USA', 'USA'),
+        ('UK', 'UK'),
+    )
+
+    MAJOR_CITIES = (
+        ('Sydney', 'Sydney'),
+        ('Melbourne', 'Melbourne'),
+        ('Brisbane', 'Brisbane'),
+        ('Perth', 'Perth'),
+        ('Adelaide', 'Adelaide'),
+        ('Toronto', 'Toronto'),
+        ('Vancouver', 'Vancouver'),
+        ('Montreal', 'Montreal'),
+        ('Calgary', 'Calgary'),
+        ('Edmonton', 'Edmonton'),
+        ('Auckland', 'Auckland'),
+        ('Wellington', 'Wellington'),
+        ('Christchurch', 'Christchurch'),
+        ('Hamilton', 'Hamilton'),
+        ('Queenstown', 'Queenstown'),
+        ('New York City', 'New York City'),
+        ('Los Angeles', 'Los Angeles'),
+        ('Chicago', 'Chicago'),
+        ('Houston', 'Houston'),
+        ('San Francisco', 'San Francisco'),
+        ('London', 'London'),
+        ('Manchester', 'Manchester'),
+        ('Birmingham', 'Birmingham'),
+        ('Glasgow', 'Glasgow'),
+        ('Edinburgh', 'Edinburgh'),
+    )
+    
+    name = models.CharField(max_length=100, choices=COUNTRY_CHOICES)
+    major_city = models.CharField(max_length=100, choices=MAJOR_CITIES)
     description = models.TextField(blank=True)
     visa_requirements = models.TextField(blank=True)
 
@@ -149,19 +187,3 @@ class Event(models.Model):
     def __str__(self):
         return self.name
 
-class Commission(models.Model):
-    INCOME_SOURCES = (
-        ('Admission Commission', 'Admission Commission'),
-        ('Visa Processing Commission', 'Visa Processing Commission'),
-        ('Other', 'Other'),
-    )
-
-    country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
-    income_date = models.DateField()
-    income_source = models.CharField(max_length=100, choices=INCOME_SOURCES, default='Other')
-    commission_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    agent = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.income_source} from {self.institution.name} ({self.country.name})"

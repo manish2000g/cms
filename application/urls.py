@@ -12,4 +12,9 @@ urlpatterns = [
     path('get-applicants/', views.get_applicants, name='get_applicants'),
     path('update-applicant/', views.update_applicant, name='update_applicant'),
     path('delete-applicant/', views.delete_applicant, name='delete_applicant'),
+    path('create-payment/', views.create_payment, name='create_payment'),
+    path('get-payment/', views.get_payment, name='get_payment'),
+    path('get-payments/', views.get_payments, name='get_payments'),
+    path('update-payment/', views.update_payment, name='update_payment'),
+    path('delete-payment/', views.delete_payment, name='delete_payment'),
 ]

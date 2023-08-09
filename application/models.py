@@ -57,6 +57,8 @@ class Applicant(models.Model):
     interested_course = models.ForeignKey(Course, on_delete=models.CASCADE)
     documents = models.ManyToManyField(Document)
     interested_institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
         return f"Application of {self.full_name}"
@@ -74,11 +76,33 @@ class Payment(models.Model):
     date = models.DateField()
     grand_total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     remaining_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    payment_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     action = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('applicant', 'description')
 
     def __str__(self):
         return f"Payment for {self.applicant.full_name}"
 
 
+class Commission(models.Model):
+    INCOME_SOURCES = (
+        ('Admission Commission', 'Admission Commission'),
+        ('Visa Processing Commission', 'Visa Processing Commission'),
+        ('Other', 'Other'),
+    )
 
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
+    income_date = models.DateField()
+    income_source = models.CharField(max_length=200, choices=INCOME_SOURCES)
+    total_installment = models.DecimalField(max_digits=10, decimal_places=2)
+    unpaid_installment = models.DecimalField(max_digits=10, decimal_places=2)
+    commission_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.income_source} from {self.institution.name} ({self.country.name})"

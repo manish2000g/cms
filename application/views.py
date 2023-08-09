@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
+from django.db.utils import IntegrityError
 from application.serializers import ApplicantListSerializer, ApplicantSerializer, DocumentSerializer, PaymentSerializer
 from service.models import Country, Course, Institution
 from .models import Applicant, Document, Payment
@@ -81,10 +82,10 @@ def create_applicant(request):
     gmat_score = request.POST.get('gmat_score')
     sat_score = request.POST.get('sat_score')
     other_language = request.POST.get('other_language')
-    country_id = request.POST.get('country_id')
-    course_id = request.POST.get('course_id')
+    country_id = request.POST.get('interested_country')
+    course_id = request.POST.get('interested_course')
     documents = request.FILES.getlist('documents')
-    institution_id = request.POST.get('institution_id')
+    institution_id = request.POST.get('interested_institution')
 
     try:
         interested_country = Country.objects.get(id=country_id)
@@ -123,7 +124,6 @@ def create_applicant(request):
     applicant.save()
 
     return Response({"success": "Applicant created successfully"}, status=201)
-
 
 
 @api_view(["GET"])
@@ -220,19 +220,17 @@ def delete_applicant(request):
     applicant = Applicant.objects.get(id=id)
     applicant.delete()
     return Response({"success": "Applicant deleted successfully"})
-    
-
 
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def create_payment(request):
-    applicant_id = request.POST.get('applicant_id')
+    applicant_id = request.POST.get('applicant')
     description = request.POST.get('description')
     date = request.POST.get('date')
     grand_total_amount = request.POST.get('grand_total_amount')
     remaining_amount = request.POST.get('remaining_amount')
-    status = request.POST.get('status')
+    payment_status = request.POST.get('payment_status')
     action = request.POST.get('action')
 
     try:
@@ -240,17 +238,21 @@ def create_payment(request):
     except Applicant.DoesNotExist:
         return Response({"error": "Applicant does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
-    payment = Payment.objects.create(
-        applicant=applicant,
-        description=description,
-        date=date,
-        grand_total_amount=grand_total_amount,
-        remaining_amount=remaining_amount,
-        status=status,
-        action=action
-    )
-    payment.save()
-    return Response({"success": "Payment created successfully"}, status=status.HTTP_201_CREATED)
+    try:
+        payment = Payment.objects.create(
+            applicant=applicant,
+            description=description,
+            date=date,
+            grand_total_amount=grand_total_amount,
+            remaining_amount=remaining_amount,
+            payment_status=payment_status,
+            action=action
+        )
+        payment.save()
+        return Response({"success": "Payment created successfully"}, status=status.HTTP_201_CREATED)
+    except IntegrityError:
+        return Response({"error": "A payment with the same applicant and description already exists"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @api_view(["GET"])
@@ -290,7 +292,7 @@ def update_payment(request):
         date = request.POST.get('date')
         grand_total_amount = request.POST.get('grand_total_amount')
         remaining_amount = request.POST.get('remaining_amount')
-        status = request.POST.get('status')
+        payment_status = request.POST.get('payment_status')
         action = request.POST.get('action')
 
         try:
@@ -303,7 +305,7 @@ def update_payment(request):
         payment.date = date
         payment.grand_total_amount = grand_total_amount
         payment.remaining_amount = remaining_amount
-        payment.status = status
+        payment.payment_status = payment_status
         payment.action = action
 
         payment.save()
