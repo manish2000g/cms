@@ -67,14 +67,13 @@ class Applicant(models.Model):
 class Payment(models.Model):
     STATUS_CHOICES = (
         ('Pending', 'Pending'),
-        ('Completed', 'Completed'),
-        ('Cancelled', 'Cancelled'),
+        ('Completed', 'Completed')
     )
 
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
     description = models.CharField(max_length=255)
     date = models.DateField()
-    grand_total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     remaining_amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     action = models.CharField(max_length=255)
