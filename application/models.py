@@ -71,14 +71,12 @@ class Payment(models.Model):
     )
 
     applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
-    description = models.CharField(max_length=255)
-    date = models.DateField()
+    description = models.CharField(max_length=45)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     remaining_amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
     action = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    due_date = models.DateField()
 
     class Meta:
         unique_together = ('applicant', 'description')
