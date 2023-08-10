@@ -62,6 +62,7 @@ def delete_document(request):
 # @permission_classes([IsAuthenticated])
 def create_applicant(request):
     applicant_purpose = request.POST.get('applicant_purpose')
+    image = request.FILES.get('image' '')
     full_name = request.POST.get('full_name')
     phone_number = request.POST.get('phone_number')
     email = request.POST.get('email')
@@ -93,6 +94,7 @@ def create_applicant(request):
 
     applicant = Applicant.objects.create(
         applicant_purpose=applicant_purpose,
+        image = image,
         full_name=full_name,
         phone_number=phone_number,
         email=email,
@@ -150,6 +152,7 @@ def update_applicant(request):
         return Response({"error": "Applicant not found"}, status=404)
 
     applicant_purpose = request.POST.get('applicant_purpose')
+    image = request.FILES.get('image', '')
     full_name = request.POST.get('full_name')
     phone_number = request.POST.get('phone_number',)
     email = request.POST.get('email')
@@ -182,6 +185,7 @@ def update_applicant(request):
         return Response({"error": "Invalid country, course, or institution provided."}, status=400)
 
     applicant.applicant_purpose = applicant_purpose
+    applicant.image = image
     applicant.full_name = full_name
     applicant.phone_number = phone_number
     applicant.email = email
