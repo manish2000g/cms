@@ -108,14 +108,13 @@ def update_institution(request):
 @permission_classes([IsAuthenticated])
 def delete_institution(request):
     id = request.GET.get("id")
-    try:
-        institution = Institution.objects.get(id=id)
-        institution.delete()
-        return Response({"success": "Institution deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
-    except Institution.DoesNotExist:
-        return Response({"error": "Institution not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+    institution = Institution.objects.get(id=id)
+    institution.delete()
+    return Response({"success": "Institution deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+    
 
-
+ 
 @api_view(["GET"])
 def get_course_country_institution(request):
     counrty = Country.objects.all()
