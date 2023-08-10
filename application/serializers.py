@@ -18,9 +18,9 @@ class ApplicantSerializer(serializers.ModelSerializer):
 
 
 class ApplicantListSerializer(serializers.ModelSerializer):
-    interested_country = serializers.StringRelatedField()
-    interested_course = serializers.StringRelatedField()
-    interested_institution = serializers.StringRelatedField()
+    interested_country = serializers.StringRelatedField(many=True)
+    interested_course = serializers.StringRelatedField(many=True)
+    interested_institution = serializers.StringRelatedField(many=True)
     class Meta:
         model = Applicant
         fields = ['id', 'full_name', 'phone_number', 'email', 'degree_title', 'degree_level', 'academic_score', 'address', 'interested_country', 'interested_course', 'interested_institution']
