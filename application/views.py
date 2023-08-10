@@ -316,12 +316,11 @@ def update_payment(request):
 
 
 @api_view(["DELETE"])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def delete_payment(request):
     id = request.GET.get("id")
-    try:
-        payment = Payment.objects.get(id=id)
-        payment.delete()
-        return Response({"success": "Payment deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
-    except Payment.DoesNotExist:
-        return Response({"error": "Payment not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+    payment = Payment.objects.get(id=id)
+    payment.delete()
+    return Response({"success": "Payment deleted successfully"})
+    

@@ -111,8 +111,7 @@ def delete_institution(request):
     
     institution = Institution.objects.get(id=id)
     institution.delete()
-    return Response({"success": "Institution deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
-    
+    return Response({"success": "Institution deleted successfully"})
 
  
 @api_view(["GET"])
