@@ -313,7 +313,7 @@ def update_payment(request):
 
 
 @api_view(["DELETE"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def delete_payment(request):
     id = request.GET.get("id")
     try:
