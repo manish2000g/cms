@@ -16,3 +16,10 @@ class InstitutionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Institution
         fields = ('institution_name',)
+
+class InstitutionListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Institution
+        fields = '__all__'
+
+

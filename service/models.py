@@ -118,13 +118,12 @@ class Course(models.Model):
 
 class Institution(models.Model):
     institution_name = models.CharField(max_length=255)
-    description = models.TextField()
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     courses = models.ManyToManyField(Course, related_name='institutions')
-    website = models.URLField(max_length=200, blank=True)
-    contact_email = models.EmailField(max_length=100, blank=True)
-    contact_phone = models.CharField(max_length=20, blank=True)
-    address = models.CharField(max_length=150, blank=True)
+    website = models.URLField(max_length=200)
+    email = models.EmailField(max_length=100)
+    contact = models.CharField(max_length=20)
+    address = models.CharField(max_length=150)
     logo = models.ImageField(upload_to='institution_logos/', blank=True)
 
     def __str__(self):

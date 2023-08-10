@@ -142,7 +142,8 @@ def get_applicant(request):
 
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated])
-def update_applicant(request, applicant_id):
+def update_applicant(request):
+    applicant_id = request.POST.get("applicant_id")
     try:
         applicant = Applicant.objects.get(id=applicant_id)
     except Applicant.DoesNotExist:
@@ -169,14 +170,14 @@ def update_applicant(request, applicant_id):
     gmat_score = request.POST.get('gmat_score')
     sat_score = request.POST.get('sat_score')
     other_language = request.POST.get('other_language')
-    interested_country_name = request.POST.get('interested_country')
-    interested_course_name = request.POST.get('interested_course')
-    interested_institution_name = request.POST.get('interested_institution')
+    country_name = request.POST.get('interested_country')
+    course_name = request.POST.get('interested_course')
+    institution_name = request.POST.get('interested_institution')
 
     try:
-        interested_country = Country.objects.get(name=interested_country_name)
-        interested_course = Course.objects.get(name=interested_course_name)
-        interested_institution = Institution.objects.get(ame=interested_institution_name)
+        interested_country = Country.objects.get(country_name=country_name)
+        interested_course = Course.objects.get(course_name=course_name)
+        interested_institution = Institution.objects.get(institution_name=institution_name)
     except (Country.DoesNotExist, Course.DoesNotExist, Institution.DoesNotExist):
         return Response({"error": "Invalid country, course, or institution provided."}, status=400)
 
@@ -286,8 +287,7 @@ def update_payment(request):
     try:
         applicant_id = request.POST.get('applicant_id')
         description = request.POST.get('description')
-        date = request.POST.get('date')
-        grand_total_amount = request.POST.get('grand_total_amount')
+        total_amount = request.POST.get('grand_total_amount')
         remaining_amount = request.POST.get('remaining_amount')
         payment_status = request.POST.get('payment_status')
         action = request.POST.get('action')
@@ -299,8 +299,7 @@ def update_payment(request):
 
         payment.applicant = applicant
         payment.description = description
-        payment.date = date
-        payment.grand_total_amount = grand_total_amount
+        payment.total_amount = total_amount
         payment.remaining_amount = remaining_amount
         payment.payment_status = payment_status
         payment.action = action
