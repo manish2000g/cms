@@ -66,7 +66,7 @@ def create_applicant(request):
     full_name = request.POST.get('full_name')
     phone_number = request.POST.get('phone_number')
     email = request.POST.get('email')
-    dob = request.POST.get('dob', '')
+    # dob = request.POST.get('dob', '')
     institution = request.POST.get('institution', '')
     degree_title = request.POST.get('degree_title', '')
     degree_level = request.POST.get('degree_level', '')
@@ -103,7 +103,7 @@ def create_applicant(request):
         full_name=full_name,
         phone_number=phone_number,
         email=email,
-        dob=dob,
+        # dob=dob,
         institution=institution,
         degree_title=degree_title,
         degree_level=degree_level,

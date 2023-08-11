@@ -37,7 +37,7 @@ class Applicant(models.Model):
     full_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=20)
     email = models.CharField(max_length=200)
-    dob = models.DateField(null=True, blank=True)
+    # dob = models.DateField(null=True, blank=True)
     institution = models.CharField(max_length=200, null=True, blank=True)
     degree_title = models.CharField(max_length=150, null=True, blank=True)
     degree_level = models.CharField(max_length=50, null=True, blank=True)
