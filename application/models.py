@@ -11,15 +11,13 @@ class Document(models.Model):
 
 class Applicant(models.Model):
     STATUS_CHOICES = (
-        ('Interested', 'Interested'),
         ('Created', 'Created'),
         ('Submitted', 'Submitted'),
-        ('Offer', 'Offer'),
+        ('Confirmed', 'Confirmed'),
         ('Visa Created', 'Visa Created'),
         ('Visa Submitted', 'Visa Submitted'),
         ('Docs Requested', 'Docs Requested'),
         ('Granted', 'Granted'),
-        ('Rejected', 'Rejected'),
         ('Enrolled', 'Enrolled')
     )
     APPLICANT_PURPOSE_CHOICE =(
@@ -45,15 +43,15 @@ class Applicant(models.Model):
     # course_start_date = models.DateField(null=True, blank=True)
     # course_end_date = models.DateField(null=True, blank=True)
     academic_score_category = models.CharField(max_length=20, choices=ACADEMIC_SCORE_CHOICE, null=True, blank=True)
-    academic_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    academic_score = models.IntegerField(null=True, blank=True)
     address = models.CharField(max_length=150, null=True, blank=True)    
-    ielts_score = models.DecimalField(max_digits=5, decimal_places=2,null=True, blank=True)
-    toefl_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    pte_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    gre_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    gmat_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    sat_score = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    other_language = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    ielts_score = models.IntegerField(null=True, blank=True)
+    toefl_score = models.IntegerField(null=True, blank=True)
+    pte_score = models.IntegerField(null=True, blank=True)
+    gre_score = models.IntegerField(null=True, blank=True)
+    gmat_score = models.IntegerField(null=True, blank=True)
+    sat_score = models.IntegerField(null=True, blank=True)
+    other_language = models.IntegerField(null=True, blank=True)
     interested_country = models.ForeignKey(Country, on_delete=models.CASCADE)
     interested_course = models.ForeignKey(Course, on_delete=models.CASCADE)
     # documents = models.ManyToManyField(Document)
