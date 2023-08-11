@@ -1,8 +1,5 @@
-from service.serializers import CountrySerializer, CourseSerializer, InstitutionSerializer
 from .models import Applicant, Document, Payment
 from rest_framework import serializers
-
-
 
 
 class DocumentSerializer(serializers.ModelSerializer):
@@ -30,3 +27,4 @@ class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         fields = '__all__'
+
