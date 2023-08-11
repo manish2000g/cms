@@ -126,6 +126,6 @@ def get_course_country_institution(request):
     return Response({
         "interested_country": counserializer.data,
         "interested_course": coserializer.data,
-        "institution_name": inserializer.data
+        "interested_institution": inserializer.data
     })
 
