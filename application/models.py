@@ -58,8 +58,7 @@ class Applicant(models.Model):
     interested_course = models.ForeignKey(Course, on_delete=models.CASCADE)
     # documents = models.ManyToManyField(Document)
     interested_institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    
     
     def __str__(self):
         return f"Application of {self.full_name}"
