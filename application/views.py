@@ -59,33 +59,33 @@ def delete_document(request):
     return Response({"success": "Applicant deleted successfully"})
 
 @api_view(["POST"])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def create_applicant(request):
     applicant_purpose = request.POST.get('applicant_purpose', '')
-    # logo = request.FILES.get('logo', '')
+    logo = request.FILES.get('logo', '')
     full_name = request.POST.get('full_name')
     phone_number = request.POST.get('phone_number')
     email = request.POST.get('email')
-    # dob = request.POST.get('dob', '')
-    institution = request.POST.get('institution', '')
-    degree_title = request.POST.get('degree_title', '')
-    degree_level = request.POST.get('degree_level', '')
-    # passed_year = request.POST.get('passed_year', '')
-    # course_start_date = request.POST.get('course_start_date', '')
-    # course_end_date = request.POST.get('course_end_date', '')
-    academic_score_category = request.POST.get('academic_score_category', '')
-    academic_score = request.POST.get('academic_score', '')
-    address = request.POST.get('address', '')
-    ielts_score = request.POST.get('ielts_score', '')
-    toefl_score = request.POST.get('toefl_score', '')
-    pte_score = request.POST.get('pte_score', '')
-    gre_score = request.POST.get('gre_score', '')
-    gmat_score = request.POST.get('gmat_score', '')
-    sat_score = request.POST.get('sat_score', '')
-    other_language = request.POST.get('other_language', '')
+    dob = request.POST.get('dob')
+    institution = request.POST.get('institution')
+    degree_title = request.POST.get('degree_title')
+    degree_level = request.POST.get('degree_level')
+    passed_year = request.POST.get('passed_year')
+    course_start_date = request.POST.get('course_start_date')
+    course_end_date = request.POST.get('course_end_date')
+    academic_score_category = request.POST.get('academic_score_category')
+    academic_score = request.POST.get('academic_score')
+    address = request.POST.get('address')
+    ielts_score = request.POST.get('ielts_score')
+    toefl_score = request.POST.get('toefl_score')
+    pte_score = request.POST.get('pte_score')
+    gre_score = request.POST.get('gre_score')
+    gmat_score = request.POST.get('gmat_score')
+    sat_score = request.POST.get('sat_score')
+    other_language = request.POST.get('other_language')
     interested_country = request.POST.get('interested_country')
     interested_course = request.POST.get('interested_course')
-    # documents = request.FILES.getlist('documents')
+    documents = request.FILES.getlist('documents')
     interested_institution = request.POST.get('interested_institution')
 
     try:
@@ -99,17 +99,17 @@ def create_applicant(request):
 
     applicant = Applicant.objects.create(
         applicant_purpose=applicant_purpose,
-        # logo = logo,
+        logo = logo,
         full_name=full_name,
         phone_number=phone_number,
         email=email,
-        # dob=dob,
+        dob=dob,
         institution=institution,
         degree_title=degree_title,
         degree_level=degree_level,
-        # passed_year=passed_year,
-        # course_start_date=course_start_date,
-        # course_end_date=course_end_date,
+        passed_year=passed_year,
+        course_start_date=course_start_date,
+        course_end_date=course_end_date,
         academic_score_category=academic_score_category,
         academic_score=academic_score,
         address=address,
@@ -124,7 +124,7 @@ def create_applicant(request):
         interested_course=interested_course,
         interested_institution=interested_institution
     )
-    # applicant.documents.set(documents)  
+    applicant.documents.set(documents)  
     applicant.save()
 
     return Response({"success": "Applicant created successfully"}, status=201)
@@ -157,7 +157,7 @@ def update_applicant(request):
         return Response({"error": "Applicant not found"}, status=404)
 
     applicant_purpose = request.POST.get('applicant_purpose')
-    logo = request.FILES.get('logo', '')
+    logo = request.FILES.get('logo')
     full_name = request.POST.get('full_name')
     phone_number = request.POST.get('phone_number',)
     email = request.POST.get('email')
