@@ -32,15 +32,14 @@ class ClassSchedule(models.Model):
     )
 
     name = models.CharField(max_length=255)
-    description = models.TextField()
     test_type = models.CharField(max_length=10, choices=TEST_CHOICES)
     duration = models.PositiveIntegerField()  # Duration in days or weeks
     start_date = models.DateField()
     end_date = models.DateField()
-    # time = models.TimeField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     max_capacity = models.PositiveIntegerField()
-    schedule = models.CharField(max_length=255)  # E.g., Monday to Friday, 9:00 AM - 1:00 PM
     instructor = models.CharField(max_length=100)
     classroom = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
