@@ -1,6 +1,13 @@
 
 from rest_framework import serializers
-from .models import Country, Course, Institution
+from .models import ClassSchedule, Country, Course, Institution
+
+
+class ClassScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClassSchedule
+        fields = '__all__'
+
 
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:

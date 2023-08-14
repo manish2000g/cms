@@ -61,8 +61,8 @@ def delete_document(request):
 @api_view(["POST"])
 # @permission_classes([IsAuthenticated])
 def create_applicant(request):
-    applicant_purpose = request.POST.get('applicant_purpose', '')
-    logo = request.FILES.get('logo', '')
+    applicant_purpose = request.POST.get('applicant_purpose')
+    logo = request.FILES.get('logo')
     full_name = request.POST.get('full_name')
     phone_number = request.POST.get('phone_number')
     email = request.POST.get('email')

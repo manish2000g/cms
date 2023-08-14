@@ -33,7 +33,6 @@ class ClassSchedule(models.Model):
 
     name = models.CharField(max_length=255)
     test_type = models.CharField(max_length=10, choices=TEST_CHOICES)
-    duration = models.PositiveIntegerField()  # Duration in days or weeks
     start_date = models.DateField()
     end_date = models.DateField()
     start_time = models.TimeField()
