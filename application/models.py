@@ -53,7 +53,7 @@ class Applicant(models.Model):
     other_language = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     interested_country = models.ForeignKey(Country, on_delete=models.CASCADE,null=True, blank=True)
     interested_course = models.ForeignKey(Course, on_delete=models.CASCADE,null=True, blank=True)
-    documents = models.ManyToManyField(Document,null=True, blank=True)
+    documents = models.ManyToManyField(Document)
     interested_institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
