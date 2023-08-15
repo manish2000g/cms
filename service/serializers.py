@@ -25,6 +25,8 @@ class InstitutionSerializer(serializers.ModelSerializer):
         fields = ('institution_name',)
 
 class InstitutionListSerializer(serializers.ModelSerializer):
+    country = serializers.StringRelatedField()
+    courses = serializers.StringRelatedField()
     class Meta:
         model = Institution
         fields = '__all__'

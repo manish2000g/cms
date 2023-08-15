@@ -63,6 +63,8 @@ def delete_document(request):
 def create_applicant(request):
     applicant_purpose = request.POST.get('applicant_purpose')
     logo = request.FILES.get('logo')
+
+    status = request.POST.get('status')
     full_name = request.POST.get('full_name')
     phone_number = request.POST.get('phone_number')
     email = request.POST.get('email')
@@ -99,6 +101,7 @@ def create_applicant(request):
     applicant = Applicant.objects.create(
         applicant_purpose=applicant_purpose,
         logo = logo,
+        status = status,
         full_name=full_name,
         phone_number=phone_number,
         email=email,

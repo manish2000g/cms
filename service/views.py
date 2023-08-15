@@ -120,7 +120,7 @@ def create_institution(request):
     # logo = request.FILES.get('logo')
 
     try:
-        country = Country.objects.get(id=country)
+        country = Country.objects.get(country_name=country)
     except Country.DoesNotExist:
         return Response({"error": "Country not found."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -134,9 +134,8 @@ def create_institution(request):
         # logo=logo
     )
     
-    for course_id in courses:
-            course = Course.objects.get(id=course_id)
-            institution.courses.add(course)  
+    courses_to_add = Course.objects.filter(course_name__in=courses)
+    institution.courses.set(courses_to_add)
     institution.save()
     return Response({"success": "Institution created successfully"}, status=status.HTTP_201_CREATED)
 

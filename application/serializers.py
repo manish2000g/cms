@@ -20,7 +20,7 @@ class ApplicantListSerializer(serializers.ModelSerializer):
     interested_institution = serializers.StringRelatedField()
     class Meta:
         model = Applicant
-        fields = ['id', 'full_name', 'phone_number', 'email', 'degree_title', 'degree_level', 'academic_score', 'address', 'interested_country', 'interested_course', 'interested_institution']
+        fields = ['id', 'status', 'full_name',  'phone_number', 'email', 'degree_title', 'degree_level', 'academic_score', 'address', 'interested_country', 'interested_course', 'interested_institution']
 
 class PaymentSerializer(serializers.ModelSerializer):
     applicant = serializers.StringRelatedField()
