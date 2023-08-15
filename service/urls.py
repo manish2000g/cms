@@ -14,5 +14,6 @@ urlpatterns = [
     path('update-class_schedule/', views.update_class_schedule, name='update-class_schedule'),
     path('delete-class_schedule/', views.delete_class_schedule, name='delete-class_schedule'),
     path('course-country-institution/', views.get_course_country_institution, name='get_course_country_institution'),
+    path('course-country/', views.get_course_country, name='get_course_country'),
 
 ]

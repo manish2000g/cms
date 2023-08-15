@@ -108,36 +108,36 @@ def delete_class_schedule(request):
 
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def create_institution(request):
     institution_name = request.POST.get('institution_name')
-    country = request.POST.get('country_id')
-    courses = request.POST.getlist('courses')  
+    country = request.POST.get('intrested_country')
+    courses = request.POST.getlist('intrested_course')  
     website = request.POST.get('website')
     email = request.POST.get('email')
     contact = request.POST.get('contact')
     address = request.POST.get('address')
-    logo = request.FILES.get('logo')
+    # logo = request.FILES.get('logo')
 
     try:
         country = Country.objects.get(id=country)
     except Country.DoesNotExist:
         return Response({"error": "Country not found."}, status=status.HTTP_400_BAD_REQUEST)
 
-    institution = Institution(
+    institution = Institution.objects.create(
         institution_name=institution_name,
         country=country,        
         website=website,
         email=email,
         contact=contact,
         address=address,
-        logo=logo
+        # logo=logo
     )
     
     for course_id in courses:
             course = Course.objects.get(id=course_id)
             institution.courses.add(course)  
-
+    institution.save()
     return Response({"success": "Institution created successfully"}, status=status.HTTP_201_CREATED)
 
 @api_view(["GET"])
@@ -177,7 +177,7 @@ def update_institution(request):
     email = request.POST.get('email')
     contact = request.POST.get('contact')
     address = request.POST.get('address')
-    logo = request.FILES.get('logo')
+    # logo = request.FILES.get('logo')
 
     try:
         country = Country.objects.get(id=country_id)
@@ -190,7 +190,7 @@ def update_institution(request):
     institution.email = email
     institution.contact = contact
     institution.address = address
-    institution.logo = logo
+    # institution.logo = logo
     institution.courses.clear()
 
     for course_id in courses:
@@ -210,7 +210,7 @@ def delete_institution(request):
     institution.delete()
     return Response({"success": "Institution deleted successfully"})
 
- 
+
 @api_view(["GET"])
 def get_course_country_institution(request):
     counrty = Country.objects.all()
@@ -224,5 +224,18 @@ def get_course_country_institution(request):
         "interested_country": counserializer.data,
         "interested_course": coserializer.data,
         "interested_institution": inserializer.data
+    })
+
+
+@api_view(["GET"])
+def get_course_country(request):
+    counrty = Country.objects.all()
+    counserializer = CountrySerializer(counrty, many=True)
+    course = Course.objects.all()
+    coserializer = CourseSerializer(course, many=True)
+
+    return Response({
+        "interested_country": counserializer.data,
+        "interested_course": coserializer.data
     })
 
