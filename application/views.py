@@ -233,28 +233,28 @@ def delete_applicant(request):
 def create_payment(request):
     applicant_id = request.POST.get('applicant')
     description = request.POST.get('description')
+    total_amount = request.POST.get('total_amount')
     remaining_amount = request.POST.get('remaining_amount')
     payment_status = request.POST.get('payment_status')
     action = request.POST.get('action')
+    due_date = request.POST.get('due_date')
 
     try:
         applicant = Applicant.objects.get(id=applicant_id)
     except Applicant.DoesNotExist:
         return Response({"error": "Applicant does not exist"}, status=status.HTTP_404_NOT_FOUND)
 
-    try:
-        payment = Payment.objects.create(
-            applicant=applicant,
-            description=description,
-            remaining_amount=remaining_amount,
-            payment_status=payment_status,
-            action=action
-        )
-        payment.save()
-        return Response({"success": "Payment created successfully"}, status=status.HTTP_201_CREATED)
-    except IntegrityError:
-        return Response({"error": "A payment with the same applicant and description already exists"}, status=status.HTTP_400_BAD_REQUEST)
-
+    payment = Payment.objects.create(
+        applicant=applicant,
+        description=description,
+        total_amount=total_amount,
+        remaining_amount=remaining_amount,
+        payment_status=payment_status,
+        action=action,
+        due_date=due_date
+    )
+    payment.save()
+    return Response({"success": "Payment created successfully"}, status=status.HTTP_201_CREATED)
 
 
 @api_view(["GET"])
@@ -291,10 +291,12 @@ def update_payment(request):
     try:
         applicant_id = request.POST.get('applicant_id')
         description = request.POST.get('description')
-        total_amount = request.POST.get('grand_total_amount')
+        total_amount = request.POST.get('total_amount')
         remaining_amount = request.POST.get('remaining_amount')
         payment_status = request.POST.get('payment_status')
         action = request.POST.get('action')
+        due_date = request.POST.get('due_date')
+        
 
         try:
             applicant = Applicant.objects.get(id=applicant_id)
@@ -307,6 +309,7 @@ def update_payment(request):
         payment.remaining_amount = remaining_amount
         payment.payment_status = payment_status
         payment.action = action
+        payment.due_date = due_date
 
         payment.save()
 
