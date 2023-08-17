@@ -233,8 +233,6 @@ def delete_applicant(request):
 def create_payment(request):
     applicant_id = request.POST.get('applicant')
     description = request.POST.get('description')
-    date = request.POST.get('date')
-    grand_total_amount = request.POST.get('grand_total_amount')
     remaining_amount = request.POST.get('remaining_amount')
     payment_status = request.POST.get('payment_status')
     action = request.POST.get('action')
@@ -248,8 +246,6 @@ def create_payment(request):
         payment = Payment.objects.create(
             applicant=applicant,
             description=description,
-            date=date,
-            grand_total_amount=grand_total_amount,
             remaining_amount=remaining_amount,
             payment_status=payment_status,
             action=action
