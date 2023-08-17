@@ -12,7 +12,7 @@ from .serializers import InstitutionListSerializer, InstitutionSerializer
 
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def create_class_schedule(request):
     name = request.POST.get('name')
     test_type = request.POST.get('test_type')
@@ -170,8 +170,8 @@ def update_institution(request):
         return Response({"error": "Institution not found."}, status=status.HTTP_404_NOT_FOUND)
 
     institution_name = request.POST.get('institution_name')
-    country_id = request.POST.get('country_id')
-    courses = request.POST.getlist('courses')  # Assuming multiple courses can be selected
+    country = request.POST.get('intrested_country')
+    courses = request.POST.getlist('intrested_course')  # Assuming multiple courses can be selected
     website = request.POST.get('website')
     email = request.POST.get('email')
     contact = request.POST.get('contact')
@@ -179,7 +179,7 @@ def update_institution(request):
     # logo = request.FILES.get('logo')
 
     try:
-        country = Country.objects.get(id=country_id)
+        country = Country.objects.get(country_name=country)
     except Country.DoesNotExist:
         return Response({"error": "Country not found."}, status=status.HTTP_400_BAD_REQUEST)
 

@@ -265,6 +265,7 @@ def get_payments(request):
         "payments": serializer.data
     })
 
+
 @api_view(["GET"])
 def get_payment(request):
     id = request.GET.get("id")
