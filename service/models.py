@@ -126,7 +126,7 @@ class Course(models.Model):
         return self.course_name
 
 class Institution(models.Model):
-    institution_name = models.CharField(max_length=255)
+    institution_name = models.CharField(max_length=255, unique=True)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     courses = models.ManyToManyField(Course, related_name='institutions')
     website = models.URLField(max_length=200)

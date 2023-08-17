@@ -112,12 +112,12 @@ def delete_class_schedule(request):
 def create_institution(request):
     institution_name = request.POST.get('institution_name')
     country = request.POST.get('intrested_country')
-    courses = request.POST.getlist('intrested_course')  
+    courses = request.POST.getlist('intrested_course') 
     website = request.POST.get('website')
     email = request.POST.get('email')
     contact = request.POST.get('contact')
     address = request.POST.get('address')
-    # logo = request.FILES.get('logo')
+    # logo = request.FILES.get('logo
 
     try:
         country = Country.objects.get(country_name=country)
