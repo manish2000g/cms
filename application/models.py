@@ -31,7 +31,7 @@ class Applicant(models.Model):
     )
     applicant_purpose = models.CharField(max_length=30, choices=APPLICANT_PURPOSE_CHOICE ,null=True, blank=True)
     logo = models.ImageField(upload_to='applicant_images/', blank=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Created' ,null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Created', null=True, blank=True)
     full_name = models.CharField(max_length=100,null=True, blank=True)
     phone_number = models.CharField(max_length=20,null=True, blank=True)
     email = models.CharField(max_length=200,null=True, blank=True)
