@@ -16,10 +16,10 @@ from .serializers import InstitutionListSerializer, InstitutionSerializer
 def create_class_schedule(request):
     name = request.POST.get('name')
     test_type = request.POST.get('test_type')
-    start_date = request.POST.get('start_date')
-    end_date = request.POST.get('end_date')
-    start_time = request.POST.get('start_time')
-    end_time = request.POST.get('end_time')
+    # start_date = request.POST.get('start_date')
+    # end_date = request.POST.get('end_date')
+    # start_time = request.POST.get('start_time')
+    # end_time = request.POST.get('end_time')
     price = request.POST.get('price')
     max_capacity = request.POST.get('max_capacity')
     instructor = request.POST.get('instructor')
@@ -28,10 +28,10 @@ def create_class_schedule(request):
     class_schedule = ClassSchedule.objects.create(
         name=name,
         test_type=test_type,
-        start_date=start_date,
-        end_date=end_date,
-        start_time=start_time,
-        end_time=end_time,
+        # start_date=start_date,
+        # end_date=end_date,
+        # start_time=start_time,
+        # end_time=end_time,
         price=price,
         max_capacity=max_capacity,
         instructor=instructor,
@@ -72,10 +72,10 @@ def update_class_schedule(request):
 
     name = request.POST.get('name')
     test_type = request.POST.get('test_type')
-    start_date = request.POST.get('start_date')
-    end_date = request.POST.get('end_date')
-    start_time = request.POST.get('start_time')
-    end_time = request.POST.get('end_time')
+    # start_date = request.POST.get('start_date')
+    # end_date = request.POST.get('end_date')
+    # start_time = request.POST.get('start_time')
+    # end_time = request.POST.get('end_time')
     price = request.POST.get('price')
     max_capacity = request.POST.get('max_capacity')
     instructor = request.POST.get('instructor')
@@ -83,10 +83,10 @@ def update_class_schedule(request):
 
     class_schedule.name = name
     class_schedule.test_type = test_type
-    class_schedule.start_date = start_date
-    class_schedule.end_date = end_date
-    class_schedule.start_time = start_time
-    class_schedule.end_time = end_time
+    # class_schedule.start_date = start_date
+    # class_schedule.end_date = end_date
+    # class_schedule.start_time = start_time
+    # class_schedule.end_time = end_time
     class_schedule.price = price
     class_schedule.max_capacity = max_capacity
     class_schedule.instructor = instructor
