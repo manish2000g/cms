@@ -6,9 +6,9 @@ from service.serializers import CountrySerializer, CourseSerializer, Institution
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
-from django.db import IntegrityError
-from .models import Institution, Country, Course
-from .serializers import InstitutionListSerializer, InstitutionSerializer
+from django.db.models import Q
+from .models import Event, Institution, Country, Course, Tag
+from .serializers import EventSerializer, InstitutionListSerializer, InstitutionSerializer, TagSerializer
 
 
 @api_view(["POST"])
@@ -112,7 +112,7 @@ def delete_class_schedule(request):
 def create_institution(request):
     institution_name = request.POST.get('institution_name')
     country = request.POST.get('intrested_country')
-    courses = request.POST.getlist('intrested_course') 
+    courses = request.POST.getlist('courses') 
     website = request.POST.get('website')
     email = request.POST.get('email')
     contact = request.POST.get('contact')
@@ -138,6 +138,7 @@ def create_institution(request):
     institution.courses.set(courses_to_add)
     institution.save()
     return Response({"success": "Institution created successfully"}, status=status.HTTP_201_CREATED)
+
 
 @api_view(["GET"])
 def get_institutions(request):
@@ -237,4 +238,145 @@ def get_course_country(request):
         "interested_country": counserializer.data,
         "interested_course": coserializer.data
     })
+
+
+@api_view(["POST"])
+def create_tag(request):
+    tag_name = request.POST.get('tag_name')
+
+    tag = Tag.objects.create(
+        tag_name=tag_name,
+    )
+    tag.save()
+    return Response({"success": "Tag created successfully"}, status=status.HTTP_201_CREATED)
+
+@api_view(["GET"])
+def get_tags(request):
+    tags = Tag.objects.all()
+    serializer = TagSerializer(tags, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["PUT"])
+def update_tag(request):
+    tag_id = request.POST.get("tag_id")
+
+    try:
+        tag = Tag.objects.get(id=tag_id)
+    except Tag.DoesNotExist:
+        return Response({"error": "Tag not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    tag_name = request.POST.get('tag_name')
+
+    tag.tag_name = tag_name
+    tag.save()
+    return Response({"success": "Tag updated successfully"}, status=status.HTTP_200_OK)
+
+@api_view(["DELETE"])
+def delete_tag(request):
+    id = request.GET.get("id")
+    
+    tag = Tag.objects.get(id=id)
+    tag.delete()
+    return Response({"success": "Tag deleted successfully"})
+
+
+@api_view(["POST"])
+def create_event(request):
+    name = request.POST.get('name')
+    description = request.POST.get('description')
+    # date = request.POST.get('date')
+    # start_time = request.POST.get('start_time')
+    # end_time = request.POST.get('end_time')
+    location = request.POST.get('location')
+    capacity = request.POST.get('capacity')
+    event_status = request.POST.get('event_status')
+    # tags = request.POST.getlist('tags')
+
+    event = Event.objects.create(
+        name=name,
+        description=description,
+        # date=date,
+        # start_time=start_time,
+        # end_time=end_time,
+        location=location,
+        capacity=capacity,
+        event_status=event_status
+    )
+    # Retrieve all existing tags
+    # existing_tags = Tag.objects.filter(Q(tag_name__in=tags))
+
+    # # Create new tags for any missing tags
+    # missing_tags = set(tags) - set(existing_tags.values_list('tag_name', flat=True))
+    # new_tags = [Tag(tag_name=tag_name) for tag_name in missing_tags]
+    # Tag.objects.bulk_create(new_tags)
+
+    # # Add all tags (existing and new) to the article
+    # tags_to_add = existing_tags.union(Tag.objects.filter(Q(tag_name__in=missing_tags)))
+    # event.tags.add(*tags_to_add)
+    return Response({"success": "Event created successfully"}, status=status.HTTP_201_CREATED)
+    
+
+@api_view(["GET"])
+def get_events(request):
+    events = Event.objects.all()
+    serializer = EventSerializer(events, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def get_event(request):
+    id = request.GET.get("id")
+    event = Event.objects.get(id=id)
+    serializer = EventSerializer(event)
+    return Response(serializer.data)
+
+@api_view(["PUT"])
+def update_event(request):
+    event_id = request.POST.get("event_id")
+
+    try:
+        event = Event.objects.get(id=event_id)
+    except Event.DoesNotExist:
+        return Response({"error": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    name = request.POST.get('name')
+    description = request.POST.get('description')
+    # date = request.POST.get('date')
+    # start_time = request.POST.get('start_time')
+    # end_time = request.POST.get('end_time')
+    location = request.POST.get('location')
+    capacity = request.POST.get('capacity')
+    event_status = request.POST.get('event_status')
+    # tags = request.POST.getlist('tags')
+
+    event.name = name
+    event.description = description
+    # event.date = date
+    # event.start_time = start_time
+    # event.end_time = end_time
+    event.location = location
+    event.capacity = capacity
+    event.event_status = event_status
+
+    # existing_tags = Tag.objects.filter(Q(tag_name__in=tags))
+
+    # missing_tags = set(tags) - set(existing_tags.values_list('tag_name', flat=True))
+    # new_tags = [Tag(tag_name=tag_name) for tag_name in missing_tags]
+    # Tag.objects.bulk_create(new_tags)
+
+    # tags_to_add = existing_tags.union(Tag.objects.filter(Q(tag_name__in=missing_tags)))
+    # event.tags.set(*tags_to_add)
+    event.save()
+    return Response({"success": "Event updated successfully"}, status=status.HTTP_200_OK)
+
+
+@api_view(["DELETE"])
+def delete_event(request):
+    id = request.GET.get("id")
+    
+    event = Event.objects.get(id=id)
+    event.delete()
+    return Response({"success": "Event deleted successfully"})
+
+    
 

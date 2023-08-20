@@ -128,7 +128,7 @@ class Course(models.Model):
 class Institution(models.Model):
     institution_name = models.CharField(max_length=255, unique=True)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    courses = models.ManyToManyField(Course, related_name='institutions')
+    courses = models.ManyToManyField(Course)
     website = models.URLField(max_length=200)
     email = models.EmailField(max_length=100)
     contact = models.CharField(max_length=20)
@@ -168,12 +168,10 @@ class Enquiry(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-    description = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    tag_name = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.name
+        return self.tag_name
 
 
 class Event(models.Model):
@@ -183,14 +181,14 @@ class Event(models.Model):
         ('Past', 'Past'),
     )
     name = models.CharField(max_length=255)
-    description = models.TextField()
-    date = models.DateField()
-    start_time = models.TimeField()
-    end_time = models.TimeField()
+    description = RichTextField()
+    # date = models.DateField()
+    # start_time = models.TimeField()
+    # end_time = models.TimeField()
     location = models.CharField(max_length=255)
     capacity = models.PositiveIntegerField()
-    status = models.CharField(max_length=15, choices=status_choices, default='Upcoming')
-    tags = models.ManyToManyField(Tag, blank=True)
+    event_status = models.CharField(max_length=15, choices=status_choices, default='Upcoming')
+    # tags = models.ManyToManyField(Tag)
 
     def __str__(self):
         return self.name
