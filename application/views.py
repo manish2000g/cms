@@ -220,7 +220,7 @@ def update_applicant(request):
 
     
 @api_view(["DELETE"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def delete_applicant(request):
     id = request.GET.get("id")
     applicant = Applicant.objects.get(id=id)
@@ -229,7 +229,7 @@ def delete_applicant(request):
 
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def create_payment(request):
     applicant_id = request.POST.get('applicant')
     description = request.POST.get('description')
@@ -320,7 +320,7 @@ def update_payment(request):
 
 
 @api_view(["DELETE"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def delete_payment(request):
     id = request.GET.get("id")
     

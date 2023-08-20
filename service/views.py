@@ -62,7 +62,7 @@ def get_class_schedule(request):
 
 
 @api_view(["PUT"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def update_class_schedule(request):
     id = request.POST.get("id")
     try:
@@ -98,7 +98,7 @@ def update_class_schedule(request):
 
 
 @api_view(["DELETE"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def delete_class_schedule(request):
     id = request.GET.get("id")
     
@@ -251,7 +251,7 @@ def get_institution(request):
         return Response({"error": "Institution not found."}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(["PUT"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def update_institution(request):
     institution_id = request.POST.get("institution_id")
 
@@ -292,7 +292,7 @@ def update_institution(request):
     return Response({"success": "Institution updated successfully"}, status=status.HTTP_200_OK)
 
 @api_view(["DELETE"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def delete_institution(request):
     id = request.GET.get("id")
     
