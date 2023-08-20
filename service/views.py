@@ -7,8 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
 from django.db.models import Q
-from .models import Event, Institution, Country, Course, Tag
-from .serializers import EventSerializer, InstitutionListSerializer, InstitutionSerializer, TagSerializer
+from .models import Event, Institution, Country, Course, Tag, Test
+from .serializers import EventSerializer, InstitutionListSerializer, InstitutionSerializer, TagSerializer, TestSerializer
 
 
 @api_view(["POST"])
@@ -105,6 +105,96 @@ def delete_class_schedule(request):
     class_schedule = ClassSchedule.objects.get(id=id)
     class_schedule.delete()
     return Response({"success": "ClassSchedule deleted successfully"})
+
+
+@api_view(["POST"])
+# @permission_classes([IsAuthenticated])
+def create_test(request):
+    class_schedule_name = request.POST.get('class_schedule')
+    description = request.POST.get('description')
+    test_date = request.POST.get('test_date')
+    test_time = request.POST.get('test_time')
+    result_date = request.POST.get('result_date')
+
+    try:
+        class_schedule = ClassSchedule.objects.get(name=class_schedule_name)
+    except ClassSchedule.DoesNotExist:
+        return Response({"error": "ClassSchedule not found."}, status=status.HTTP_400_BAD_REQUEST)
+
+    test = Test.objects.create(
+        class_schedule=class_schedule,
+        description=description,
+        test_date=test_date,
+        test_time=test_time,
+        result_date=result_date
+    )
+    test.save()
+    return Response({"success": "Test created successfully"}, status=status.HTTP_201_CREATED)
+
+
+@api_view(["GET"])
+def get_tests(request):
+    tests = Test.objects.all()
+    serializer = TestSerializer(tests, many=True)
+    return Response({"tests": serializer.data})
+
+
+@api_view(["GET"])
+def get_test(request):
+    test_id = request.GET.get("id")
+
+    try:
+        test = Test.objects.get(id=test_id)
+        serializer = TestSerializer(test)
+        return Response(serializer.data)
+    except Test.DoesNotExist:
+        return Response({"error": "Test not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(["PUT"])
+# @permission_classes([IsAuthenticated])
+def update_test(request):
+    test_id = request.POST.get("test_id")
+
+    try:
+        test = Test.objects.get(id=test_id)
+    except Test.DoesNotExist:
+        return Response({"error": "Test not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    class_schedule_id = request.POST.get('class_schedule_id')
+    description = request.POST.get('description')
+    test_date = request.POST.get('test_date')
+    test_time = request.POST.get('test_time')
+    result_date = request.POST.get('result_date')
+
+    try:
+        class_schedule = ClassSchedule.objects.get(id=class_schedule_id)
+    except ClassSchedule.DoesNotExist:
+        return Response({"error": "ClassSchedule not found."}, status=status.HTTP_400_BAD_REQUEST)
+
+    test.class_schedule = class_schedule
+    test.description = description
+    test.test_date = test_date
+    test.test_time = test_time
+    test.result_date = result_date
+
+    test.save()
+
+    return Response({"success": "Test updated successfully"}, status=status.HTTP_200_OK)
+
+
+@api_view(["DELETE"])
+# @permission_classes([IsAuthenticated])
+def delete_test(request):
+    test_id = request.GET.get("id")
+
+    try:
+        test = Test.objects.get(id=test_id)
+        test.delete()
+        return Response({"success": "Test deleted successfully"})
+    except Test.DoesNotExist:
+        return Response({"error": "Test not found."}, status=status.HTTP_404_NOT_FOUND)
+
 
 
 @api_view(["POST"])
@@ -254,7 +344,8 @@ def create_tag(request):
 def get_tags(request):
     tags = Tag.objects.all()
     serializer = TagSerializer(tags, many=True)
-    return Response(serializer.data)
+    return Response({
+        "tags": serializer.data})
 
 
 @api_view(["PUT"])
@@ -321,7 +412,8 @@ def create_event(request):
 def get_events(request):
     events = Event.objects.all()
     serializer = EventSerializer(events, many=True)
-    return Response(serializer.data)
+    return Response({
+        "events": serializer.data})
 
 @api_view(["GET"])
 def get_event(request):

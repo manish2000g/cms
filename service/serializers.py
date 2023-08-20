@@ -1,11 +1,17 @@
 
 from rest_framework import serializers
-from .models import ClassSchedule, Country, Course, Event, Institution, Tag
+from .models import ClassSchedule, Country, Course, Event, Institution, Tag, Test
 
 
 class ClassScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClassSchedule
+        fields = '__all__'
+
+class TestSerializer(serializers.ModelSerializer):
+    class_schedule = serializers.StringRelatedField()
+    class Meta:
+        model = Test
         fields = '__all__'
 
         
