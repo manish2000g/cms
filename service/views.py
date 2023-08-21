@@ -394,17 +394,17 @@ def create_event(request):
         capacity=capacity,
         event_status=event_status
     )
-    # Retrieve all existing tags
-    existing_tags = Tag.objects.filter(Q(tag_name__in=tags))
+    # # Retrieve all existing tags
+    # existing_tags = Tag.objects.filter(Q(tag_name__in=tags))
 
-    # Create new tags for any missing tags
-    missing_tags = set(tags) - set(existing_tags.values_list('tag_name', flat=True))
-    new_tags = [Tag(tag_name=tag_name) for tag_name in missing_tags]
-    Tag.objects.bulk_create(new_tags)
+    # # Create new tags for any missing tags
+    # missing_tags = set(tags) - set(existing_tags.values_list('tag_name', flat=True))
+    # new_tags = [Tag(tag_name=tag_name) for tag_name in missing_tags]
+    # Tag.objects.bulk_create(new_tags)
 
-    # Add all tags (existing and new) to the article
-    tags_to_add = existing_tags.union(Tag.objects.filter(Q(tag_name__in=missing_tags)))
-    event.tags.add(*tags_to_add)
+    # # Add all tags (existing and new) to the article
+    # tags_to_add = existing_tags.union(Tag.objects.filter(Q(tag_name__in=missing_tags)))
+    # event.tags.add(*tags_to_add)
     return Response({"success": "Event created successfully"}, status=status.HTTP_201_CREATED)
     
 
