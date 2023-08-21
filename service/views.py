@@ -201,8 +201,8 @@ def delete_test(request):
 # @permission_classes([IsAuthenticated])
 def create_institution(request):
     institution_name = request.POST.get('institution_name')
-    country = request.POST.get('intrested_country')
-    courses = request.POST.getlist('courses') 
+    country = request.POST.get('interested_country')
+    courses = request.POST.getlist('interested_course') 
     website = request.POST.get('website')
     email = request.POST.get('email')
     contact = request.POST.get('contact')
@@ -226,6 +226,7 @@ def create_institution(request):
     
     courses_to_add = Course.objects.filter(course_name__in=courses)
     institution.courses.set(courses_to_add)
+    print(courses)
     institution.save()
     return Response({"success": "Institution created successfully"}, status=status.HTTP_201_CREATED)
 
@@ -395,16 +396,16 @@ def create_event(request):
         event_status=event_status
     )
     # Retrieve all existing tags
-    # existing_tags = Tag.objects.filter(Q(tag_name__in=tags))
+    existing_tags = Tag.objects.filter(Q(tag_name__in=tags))
 
-    # # Create new tags for any missing tags
-    # missing_tags = set(tags) - set(existing_tags.values_list('tag_name', flat=True))
-    # new_tags = [Tag(tag_name=tag_name) for tag_name in missing_tags]
-    # Tag.objects.bulk_create(new_tags)
+    # Create new tags for any missing tags
+    missing_tags = set(tags) - set(existing_tags.values_list('tag_name', flat=True))
+    new_tags = [Tag(tag_name=tag_name) for tag_name in missing_tags]
+    Tag.objects.bulk_create(new_tags)
 
-    # # Add all tags (existing and new) to the article
-    # tags_to_add = existing_tags.union(Tag.objects.filter(Q(tag_name__in=missing_tags)))
-    # event.tags.add(*tags_to_add)
+    # Add all tags (existing and new) to the article
+    tags_to_add = existing_tags.union(Tag.objects.filter(Q(tag_name__in=missing_tags)))
+    event.tags.add(*tags_to_add)
     return Response({"success": "Event created successfully"}, status=status.HTTP_201_CREATED)
     
 
