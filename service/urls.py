@@ -3,11 +3,11 @@ from . import views
 
 urlpatterns = [
 
-    path('api/create-country/', views.create_country, name='create-country'),
-    path('api/get-countries/', views.get_countries, name='get-countries'),
-    path('api/get-country/', views.get_country, name='get-country'),
-    path('api/update-country/', views.update_country, name='update-country'),
-    path('api/delete-country/', views.delete_country, name='delete-country'),
+    path('create-country/', views.create_country, name='create-country'),
+    path('get-countries/', views.get_countries, name='get-countries'),
+    path('get-country/', views.get_country, name='get-country'),
+    path('update-country/', views.update_country, name='update-country'),
+    path('delete-country/', views.delete_country, name='delete-country'),
 
     path('create-course-type/', views.create_course_type, name='create-course-type'),
     path('get-course-types/', views.get_course_types, name='get-course-types'),
@@ -15,11 +15,11 @@ urlpatterns = [
     path('update-course-type/', views.update_course_type, name='update-course-type'),
     path('delete-course-type/', views.delete_course_type, name='delete-course-type'),
 
-    path('api/create-course/', views.create_course, name='create-course'),
-    path('api/get-courses/', views.get_courses, name='get-courses'),
-    path('api/get-course/', views.get_course, name='get-course'),
-    path('api/update-course/', views.update_course, name='update-course'),
-    path('api/delete-course/', views.delete_course, name='delete-course'),
+    path('create-course/', views.create_course, name='create-course'),
+    path('get-courses/', views.get_courses, name='get-courses'),
+    path('get-course/', views.get_course, name='get-course'),
+    path('update-course/', views.update_course, name='update-course'),
+    path('delete-course/', views.delete_course, name='delete-course'),
 
     path('create-institution/', views.create_institution, name='create-institution'),
     path('get-institutions/', views.get_institutions, name='get-institutions'),
