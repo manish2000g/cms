@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import ClassSchedule, Country, Course, Event, Institution, Tag, Test
+from .models import ClassSchedule, Country, Course, CourseType, Event, Institution, Tag, Test
 
 
 class ClassScheduleSerializer(serializers.ModelSerializer):
@@ -41,9 +41,8 @@ class CountryListSerializer(serializers.ModelSerializer):
 
 
 class CourseTypeSerializer(serializers.ModelSerializer):
-    degreee = serializers.StringRelatedField()
     class Meta:
-        model = Course
+        model = CourseType
         fields = '__all__'
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -52,6 +51,7 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = ('course_name',)
 
 class CourseListSerializer(serializers.ModelSerializer):
+    degreee = serializers.StringRelatedField()
     class Meta:
         model = Course
         fields = '__all__'
