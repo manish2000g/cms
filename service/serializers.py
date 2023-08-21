@@ -33,10 +33,22 @@ class CountrySerializer(serializers.ModelSerializer):
         model = Country
         fields = ('country_name',)
 
+
+class CountryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = '__all__'
+
+
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ('course_name',)
+
+class CourseListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = '__all__'
 
 class InstitutionSerializer(serializers.ModelSerializer):
     class Meta:

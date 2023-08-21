@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.db.models import Q
 from .models import Event, Institution, Country, Course, Tag, Test
-from .serializers import EventSerializer, InstitutionListSerializer, InstitutionSerializer, TagSerializer, TestSerializer
+from .serializers import CountryListSerializer, CourseListSerializer, EventSerializer, InstitutionListSerializer, InstitutionSerializer, TagSerializer, TestSerializer
 
 
 @api_view(["POST"])
@@ -194,6 +194,157 @@ def delete_test(request):
         return Response({"success": "Test deleted successfully"})
     except Test.DoesNotExist:
         return Response({"error": "Test not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(["POST"])
+# @permission_classes([IsAuthenticated])
+def create_country(request):
+    country_name = request.POST.get('country_name')
+    description = request.POST.get('description')
+
+    country = Country.objects.create(
+        country_name=country_name,
+        description=description
+    )
+    country.save()
+    
+    return Response({"success": "Country created successfully"}, status=status.HTTP_201_CREATED)
+
+
+@api_view(["GET"])
+def get_countries(request):
+    countries = Country.objects.all()
+    serializer = CountryListSerializer(countries, many=True)
+    return Response({"countries": serializer.data})
+
+
+@api_view(["GET"])
+def get_country(request):
+    country_id = request.GET.get("id")
+
+    try:
+        country = Country.objects.get(id=country_id)
+        serializer = CountryListSerializer(country)
+        return Response(serializer.data)
+    except Country.DoesNotExist:
+        return Response({"error": "Country not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(["PUT"])
+# @permission_classes([IsAuthenticated])
+def update_country(request):
+    country_id = request.POST.get("country_id")
+
+    try:
+        country = Country.objects.get(id=country_id)
+    except Country.DoesNotExist:
+        return Response({"error": "Country not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    country_name = request.POST.get('country_name')
+    description = request.POST.get('description')
+
+    country.country_name = country_name
+    country.description = description
+
+    country.save()
+
+    return Response({"success": "Country updated successfully"}, status=status.HTTP_200_OK)
+
+
+@api_view(["DELETE"])
+# @permission_classes([IsAuthenticated])
+def delete_country(request):
+    country_id = request.GET.get("id")
+
+    try:
+        country = Country.objects.get(id=country_id)
+        country.delete()
+        return Response({"success": "Country deleted successfully"})
+    except Country.DoesNotExist:
+        return Response({"error": "Country not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(["POST"])
+# @permission_classes([IsAuthenticated])
+def create_course(request):
+    course_name = request.POST.get('course_name')
+    description = request.POST.get('description')
+    # course_start_date = request.POST.get('course_start_date')
+    # course_end_date = request.POST.get('course_end_date')
+    # application_deadline = request.POST.get('application_deadline')
+    # course_image = request.FILES.get('course_image')
+
+    course = Course.objects.create(
+        course_name=course_name,
+        description=description,
+        # course_start_date=course_start_date,
+        # course_end_date=course_end_date,
+        # application_deadline=application_deadline,
+        # course_image=course_image
+    )
+    
+    return Response({"success": "Course created successfully"}, status=status.HTTP_201_CREATED)
+
+
+@api_view(["GET"])
+def get_courses(request):
+    courses = Course.objects.all()
+    serializer = CourseListSerializer(courses, many=True)
+    return Response({"courses": serializer.data})
+
+
+@api_view(["GET"])
+def get_course(request):
+    course_id = request.GET.get("id")
+
+    try:
+        course = Course.objects.get(id=course_id)
+        serializer = CourseListSerializer(course)
+        return Response(serializer.data)
+    except Course.DoesNotExist:
+        return Response({"error": "Course not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(["PUT"])
+# @permission_classes([IsAuthenticated])
+def update_course(request):
+    course_id = request.POST.get("course_id")
+
+    try:
+        course = Course.objects.get(id=course_id)
+    except Course.DoesNotExist:
+        return Response({"error": "Course not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    course_name = request.POST.get('course_name')
+    description = request.POST.get('description')
+    # course_start_date = request.POST.get('course_start_date')
+    # course_end_date = request.POST.get('course_end_date')
+    # application_deadline = request.POST.get('application_deadline')
+    # course_image = request.FILES.get('course_image')
+
+    course.course_name = course_name
+    course.description = description
+    # course.course_start_date = course_start_date
+    # course.course_end_date = course_end_date
+    # course.application_deadline = application_deadline
+    # course.course_image = course_image
+
+    course.save()
+
+    return Response({"success": "Course updated successfully"}, status=status.HTTP_200_OK)
+
+
+@api_view(["DELETE"])
+# @permission_classes([IsAuthenticated])
+def delete_course(request):
+    course_id = request.GET.get("id")
+
+    try:
+        course = Course.objects.get(id=course_id)
+        course.delete()
+        return Response({"success": "Course deleted successfully"})
+    except Course.DoesNotExist:
+        return Response({"error": "Course not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
 

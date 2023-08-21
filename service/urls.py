@@ -3,6 +3,18 @@ from . import views
 
 urlpatterns = [
 
+    path('api/create-country/', views.create_country, name='create-country'),
+    path('api/get-countries/', views.get_countries, name='get-countries'),
+    path('api/get-country/', views.get_country, name='get-country'),
+    path('api/update-country/', views.update_country, name='update-country'),
+    path('api/delete-country/', views.delete_country, name='delete-country'),
+
+    path('api/create-course/', views.create_course, name='create-course'),
+    path('api/get-courses/', views.get_courses, name='get-courses'),
+    path('api/get-course/', views.get_course, name='get-course'),
+    path('api/update-course/', views.update_course, name='update-course'),
+    path('api/delete-course/', views.delete_course, name='delete-course'),
+
     path('create-institution/', views.create_institution, name='create-institution'),
     path('get-institutions/', views.get_institutions, name='get-institutions'),
     path('get-institution/', views.get_institution, name='get-institution'),

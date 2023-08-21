@@ -60,67 +60,20 @@ class Test(models.Model):
 
 
 class Country(models.Model):
-    COUNTRY_CHOICES = (
-        ('Australia', 'Australia'),
-        ('Canada', 'Canada'),
-        ('New Zealand', 'New Zealand'),
-        ('USA', 'USA'),
-        ('UK', 'UK'),
-    )
-
-    MAJOR_CITIES = (
-        ('Sydney', 'Sydney'),
-        ('Melbourne', 'Melbourne'),
-        ('Brisbane', 'Brisbane'),
-        ('Perth', 'Perth'),
-        ('Adelaide', 'Adelaide'),
-        ('Toronto', 'Toronto'),
-        ('Vancouver', 'Vancouver'),
-        ('Montreal', 'Montreal'),
-        ('Calgary', 'Calgary'),
-        ('Edmonton', 'Edmonton'),
-        ('Auckland', 'Auckland'),
-        ('Wellington', 'Wellington'),
-        ('Christchurch', 'Christchurch'),
-        ('Hamilton', 'Hamilton'),
-        ('Queenstown', 'Queenstown'),
-        ('New York City', 'New York City'),
-        ('Los Angeles', 'Los Angeles'),
-        ('Chicago', 'Chicago'),
-        ('Houston', 'Houston'),
-        ('San Francisco', 'San Francisco'),
-        ('London', 'London'),
-        ('Manchester', 'Manchester'),
-        ('Birmingham', 'Birmingham'),
-        ('Glasgow', 'Glasgow'),
-        ('Edinburgh', 'Edinburgh'),
-    )
-    
-    country_name = models.CharField(max_length=100, choices=COUNTRY_CHOICES)
-    major_city = models.CharField(max_length=100, choices=MAJOR_CITIES)
-    description = models.TextField(blank=True)
-    visa_requirements = models.TextField(blank=True)
+    country_name = models.CharField(max_length=100)
+    description = RichTextField(blank=True)
 
     def __str__(self):
         return self.country_name
   
 
 class Course(models.Model):
-    COURSE_TYPE_CHOICES = (
-        ('Undergraduate', 'Undergraduate'),
-        ('Postgraduate', 'Postgraduate'),
-        ('Diploma', 'Diploma'),
-        ('Certificate', 'Certificate'),
-        ('Short Course', 'Short Course'),
-    )
-
     course_name = models.CharField(max_length=255)
-    description = RichTextField()
-    course_start_date = models.DateField()
-    course_end_date = models.DateField()
-    application_deadline = models.DateField()
-    course_website = models.URLField(max_length=200, blank=True)
-    course_image = models.ImageField(upload_to='course_images/', blank=True)
+    description = RichTextField(blank=True)
+    # course_start_date = models.DateField()
+    # course_end_date = models.DateField()
+    # application_deadline = models.DateField()
+    # course_image = models.ImageField(upload_to='course_images/', blank=True)
 
     def __str__(self):
         return self.course_name
