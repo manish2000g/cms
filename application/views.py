@@ -10,7 +10,7 @@ from .models import Applicant, Document, Payment
 
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def create_document(request):
     title = request.POST.get('title')
     file = request.FILES.get('file')
@@ -36,7 +36,7 @@ def get_document(request):
     return Response(serializer.data)
 
 @api_view(["PUT"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def update_document(request):
     id = request.GET.get("id")
 
@@ -149,7 +149,7 @@ def get_applicant(request):
 
 
 @api_view(["PUT"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def update_applicant(request):
     applicant_id = request.POST.get("applicant_id")
     try:
@@ -280,7 +280,7 @@ def get_payment(request):
 
 
 @api_view(["PUT"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def update_payment(request):
     payment_id = request.POST.get("payment_id")
 
