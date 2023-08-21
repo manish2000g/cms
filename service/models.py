@@ -127,8 +127,8 @@ class Course(models.Model):
 
 class Institution(models.Model):
     institution_name = models.CharField(max_length=255, unique=True)
-    country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    courses = models.ManyToManyField(Course)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='country')
+    courses = models.ManyToManyField(Course, related_name='courses')
     website = models.URLField(max_length=200)
     email = models.EmailField(max_length=100)
     contact = models.CharField(max_length=20)
