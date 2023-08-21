@@ -151,9 +151,9 @@ def get_applicant(request):
 @api_view(["POST"])
 # @permission_classes([IsAuthenticated])
 def update_applicant(request):
-    applicant_id = request.POST.get("applicant_id")
+    id = request.POST.get("id")
     try:
-        applicant = Applicant.objects.get(id=applicant_id)
+        applicant = Applicant.objects.get(id=id)
     except Applicant.DoesNotExist:
         return Response({"error": "Applicant not found"}, status=404)
 
