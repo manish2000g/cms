@@ -9,6 +9,9 @@ class DocumentSerializer(serializers.ModelSerializer):
 
 
 class ApplicantSerializer(serializers.ModelSerializer):
+    interested_country = serializers.StringRelatedField()
+    interested_course = serializers.StringRelatedField()
+    interested_institution = serializers.StringRelatedField()
     class Meta:
         model = Applicant
         fields = '__all__'

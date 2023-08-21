@@ -66,9 +66,15 @@ class Country(models.Model):
     def __str__(self):
         return self.country_name
   
+class CourseType(models.Model):
+    degree = models.CharField(max_length=100)
+    def __str__(self):
+        return self.degree
+
 
 class Course(models.Model):
     course_name = models.CharField(max_length=255)
+    degree = models.ForeignKey(CourseType, on_delete=models.CASCADE, related_name='degreee')
     description = RichTextField(blank=True)
     # course_start_date = models.DateField()
     # course_end_date = models.DateField()

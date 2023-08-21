@@ -40,6 +40,12 @@ class CountryListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CourseTypeSerializer(serializers.ModelSerializer):
+    degreee = serializers.StringRelatedField()
+    class Meta:
+        model = Course
+        fields = '__all__'
+
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course

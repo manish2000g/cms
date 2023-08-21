@@ -159,6 +159,7 @@ def update_applicant(request):
 
     applicant_purpose = request.POST.get('applicant_purpose')
     logo = request.FILES.get('logo')
+    status = request.POST.get('status', 'Created')
     full_name = request.POST.get('full_name')
     phone_number = request.POST.get('phone_number',)
     email = request.POST.get('email')
@@ -191,6 +192,7 @@ def update_applicant(request):
 
     applicant.applicant_purpose = applicant_purpose
     applicant.logo = logo
+    applicant.status = status
     applicant.full_name = full_name
     applicant.phone_number = phone_number
     applicant.email = email

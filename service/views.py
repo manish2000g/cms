@@ -7,8 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
 from django.db.models import Q
-from .models import Event, Institution, Country, Course, Tag, Test
-from .serializers import CountryListSerializer, CourseListSerializer, EventSerializer, InstitutionListSerializer, InstitutionSerializer, TagSerializer, TestSerializer
+from .models import CourseType, Event, Institution, Country, Course, Tag, Test
+from .serializers import CountryListSerializer, CourseListSerializer, CourseTypeSerializer, EventSerializer, InstitutionListSerializer, InstitutionSerializer, TagSerializer, TestSerializer
 
 
 @api_view(["POST"])
@@ -265,24 +265,86 @@ def delete_country(request):
 
 
 @api_view(["POST"])
+def create_course_type(request):
+    degree = request.POST.get('degree')
+    
+    course_type = CourseType.objects.create(degree=degree)
+    course_type.save()
+    return Response({"success": "Course Type created successfully"}, status=status.HTTP_201_CREATED)
+
+
+@api_view(["GET"])
+def get_course_types(request):
+    course_types = CourseType.objects.all()
+    serializer = CourseTypeSerializer(course_types, many=True)  # Assuming you have a serializer for CourseType
+    
+    return Response({
+        "course_types": serializer.data})
+
+@api_view(["GET"])
+def get_course_type(request):
+    id = request.GET.get('id')
+    try:
+        course_type = CourseType.objects.get(id=id)
+    except CourseType.DoesNotExist:
+        return Response({"error": "Course Type not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = CourseTypeSerializer(course_type)  # Assuming you have a serializer for CourseType
+    
+    return Response(serializer.data)
+
+@api_view(["PUT"])
+def update_course_type(request):
+    id = request.data.get('id')  # Use request.data for update
+    try:
+        course_type = CourseType.objects.get(id=id)
+    except CourseType.DoesNotExist:
+        return Response({"error": "Course Type not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+    degree = request.data.get('degree')
+    course_type.degree = degree
+    course_type.save()
+    
+    return Response({"success": "Course Type updated successfully"}, status=status.HTTP_200_OK)
+
+@api_view(["DELETE"])
+def delete_course_type(request):
+    id = request.data.get('id')
+    try:
+        course_type = CourseType.objects.get(id=id)
+    except CourseType.DoesNotExist:
+        return Response({"error": "Course Type not found."}, status=status.HTTP_404_NOT_FOUND)
+    course_type.delete()
+    return Response({"success": "Course Type deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(["POST"])
 # @permission_classes([IsAuthenticated])
 def create_course(request):
     course_name = request.POST.get('course_name')
+    cdegree = request.POST.get('degree') 
+
     description = request.POST.get('description')
     # course_start_date = request.POST.get('course_start_date')
     # course_end_date = request.POST.get('course_end_date')
     # application_deadline = request.POST.get('application_deadline')
     # course_image = request.FILES.get('course_image')
 
+    try:
+        degree = CourseType.objects.get(degree=cdegree)
+    except CourseType.DoesNotExist:
+        return Response({"error": "Degree not found."}, status=status.HTTP_400_BAD_REQUEST)
+
     course = Course.objects.create(
         course_name=course_name,
+        degree=degree,
         description=description,
         # course_start_date=course_start_date,
         # course_end_date=course_end_date,
         # application_deadline=application_deadline,
         # course_image=course_image
     )
-    
+    course.save()
     return Response({"success": "Course created successfully"}, status=status.HTTP_201_CREATED)
 
 
@@ -316,21 +378,27 @@ def update_course(request):
         return Response({"error": "Course not found."}, status=status.HTTP_404_NOT_FOUND)
 
     course_name = request.POST.get('course_name')
+    cdegree = request.POST.get('degree') 
     description = request.POST.get('description')
     # course_start_date = request.POST.get('course_start_date')
     # course_end_date = request.POST.get('course_end_date')
     # application_deadline = request.POST.get('application_deadline')
     # course_image = request.FILES.get('course_image')
 
+    try:
+        degree = CourseType.objects.get(degree=cdegree)
+    except CourseType.DoesNotExist:
+        return Response({"error": "Degree not found."}, status=status.HTTP_400_BAD_REQUEST)
+
     course.course_name = course_name
     course.description = description
+    course.degree = degree
     # course.course_start_date = course_start_date
     # course.course_end_date = course_end_date
     # course.application_deadline = application_deadline
     # course.course_image = course_image
 
     course.save()
-
     return Response({"success": "Course updated successfully"}, status=status.HTTP_200_OK)
 
 
@@ -345,7 +413,6 @@ def delete_course(request):
         return Response({"success": "Course deleted successfully"})
     except Course.DoesNotExist:
         return Response({"error": "Course not found."}, status=status.HTTP_404_NOT_FOUND)
-
 
 
 @api_view(["POST"])

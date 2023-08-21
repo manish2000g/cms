@@ -9,6 +9,12 @@ urlpatterns = [
     path('api/update-country/', views.update_country, name='update-country'),
     path('api/delete-country/', views.delete_country, name='delete-country'),
 
+    path('create-course-type/', views.create_course_type, name='create-course-type'),
+    path('get-course-types/', views.get_course_types, name='get-course-types'),
+    path('get-course-type/', views.get_course_type, name='get-course-type'),
+    path('update-course-type/', views.update_course_type, name='update-course-type'),
+    path('delete-course-type/', views.delete_course_type, name='delete-course-type'),
+
     path('api/create-course/', views.create_course, name='create-course'),
     path('api/get-courses/', views.get_courses, name='get-courses'),
     path('api/get-course/', views.get_course, name='get-course'),
@@ -21,11 +27,11 @@ urlpatterns = [
     path('update-institution/', views.update_institution, name='update-institution'),
     path('delete-institution/', views.delete_institution, name='delete-institution'),
 
-    path('create-class_schedule/', views.create_class_schedule, name='create-class_schedule'),
-    path('get-class_schedules/', views.get_class_schedules, name='get-class_schedules'),
-    path('get-class_schedule/', views.get_class_schedule, name='get-class_schedule'),
-    path('update-class_schedule/', views.update_class_schedule, name='update-class_schedule'),
-    path('delete-class_schedule/', views.delete_class_schedule, name='delete-class_schedule'),
+    path('create-class-schedule/', views.create_class_schedule, name='create-class_schedule'),
+    path('get-class-schedules/', views.get_class_schedules, name='get-class_schedules'),
+    path('get-class-schedule/', views.get_class_schedule, name='get-class_schedule'),
+    path('update-class-schedule/', views.update_class_schedule, name='update-class_schedule'),
+    path('delete-class-schedule/', views.delete_class_schedule, name='delete-class_schedule'),
 
     path('create-test/', views.create_test, name='create-test'),
     path('get-tests/', views.get_tests, name='get-tests'),
