@@ -35,7 +35,7 @@ def get_document(request):
     serializer = DocumentSerializer(document)
     return Response(serializer.data)
 
-@api_view(["PUT"])
+@api_view(["POST"])
 # @permission_classes([IsAuthenticated])
 def update_document(request):
     id = request.GET.get("id")
@@ -148,7 +148,7 @@ def get_applicant(request):
     return Response(serializer.data)
 
 
-@api_view(["PUT"])
+@api_view(["POST"])
 # @permission_classes([IsAuthenticated])
 def update_applicant(request):
     applicant_id = request.POST.get("applicant_id")
@@ -279,7 +279,7 @@ def get_payment(request):
         return Response({"error": "Payment not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(["PUT"])
+@api_view(["POST"])
 # @permission_classes([IsAuthenticated])
 def update_payment(request):
     payment_id = request.POST.get("payment_id")

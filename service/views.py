@@ -61,7 +61,7 @@ def get_class_schedule(request):
         return Response({"error": "class_schedule not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(["PUT"])
+@api_view(["POST"])
 # @permission_classes([IsAuthenticated])
 def update_class_schedule(request):
     id = request.POST.get("id")
@@ -151,7 +151,7 @@ def get_test(request):
         return Response({"error": "Test not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(["PUT"])
+@api_view(["POST"])
 # @permission_classes([IsAuthenticated])
 def update_test(request):
     test_id = request.POST.get("test_id")
@@ -251,7 +251,7 @@ def get_institution(request):
     except Institution.DoesNotExist:
         return Response({"error": "Institution not found."}, status=status.HTTP_404_NOT_FOUND)
 
-@api_view(["PUT"])
+@api_view(["POST"])
 # @permission_classes([IsAuthenticated])
 def update_institution(request):
     institution_id = request.POST.get("institution_id")
@@ -349,10 +349,9 @@ def get_tags(request):
         "tags": serializer.data})
 
 
-@api_view(["PUT"])
+@api_view(["POST"])
 def update_tag(request):
     tag_id = request.POST.get("tag_id")
-
     try:
         tag = Tag.objects.get(id=tag_id)
     except Tag.DoesNotExist:
@@ -423,7 +422,7 @@ def get_event(request):
     serializer = EventSerializer(event)
     return Response(serializer.data)
 
-@api_view(["PUT"])
+@api_view(["POST"])
 def update_event(request):
     event_id = request.POST.get("event_id")
 
