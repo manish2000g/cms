@@ -1,3 +1,4 @@
+import json
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -150,12 +151,14 @@ def get_applicant(request):
 
 @api_view(["POST"])
 def update_applicant_status(request):
-    id = request.POST.get('id')
+    data = json.loads(request.body)  # Parse the JSON data from the request body
+    id = data.get('id')
+    print(id)
     try:
         applicant = Applicant.objects.get(id=id)
     except Applicant.DoesNotExist:
         return Response({"error": "Applicant not found"}, status=404)
-    status = request.POST.get('newStatus')
+    status = data.get('newStatus')
     applicant.status=status
     applicant.save()
     return Response({"success": 'Applicant Updated successfully'})

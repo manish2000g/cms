@@ -32,10 +32,10 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-CSRF_TRUSTED_ORIGINS =['https://dee8-103-163-182-160.ngrok-free.app', 'http://localhost:8084', 'https://seashell-app-7ctt9.ondigitalocean.app',]
+CSRF_TRUSTED_ORIGINS =['https://431e-103-186-197-247.ngrok-free.app', 'http://localhost:8081', 'https://seashell-app-7ctt9.ondigitalocean.app',]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8084", 'https://dee8-103-163-182-160.ngrok-free.app', 'https://seashell-app-7ctt9.ondigitalocean.app',
+    "http://localhost:8081", 'https://431e-103-186-197-247.ngrok-free.app', 'https://seashell-app-7ctt9.ondigitalocean.app',
 ]
 
 CORS_ALLOW_METHODS = [
