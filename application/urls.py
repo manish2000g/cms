@@ -10,6 +10,7 @@ urlpatterns = [
     path('create-applicant/', views.create_applicant, name='create_applicant'),
     path('get-applicant/', views.get_applicant, name='get_applicant'),
     path('get-applicants/', views.get_applicants, name='get_applicants'),
+    path('update-applicant-status/', views.update_applicant_status, name='update_applicant_status'),
     path('update-applicant/', views.update_applicant, name='update_applicant'),
     path('delete-applicant/', views.delete_applicant, name='delete_applicant'),
     path('create-payment/', views.create_payment, name='create_payment'),
