@@ -63,7 +63,7 @@ class InstitutionSerializer(serializers.ModelSerializer):
 
 class InstitutionListSerializer(serializers.ModelSerializer):
     country = serializers.StringRelatedField()
-    courses = CourseSerializer(many=True)
+    courses = serializers.StringRelatedField()
     class Meta:
         model = Institution
         fields = '__all__'
