@@ -1,4 +1,2 @@
-version: 2
-services:
-  myapp:
-    start: python manage.py   # Define your start command here
+setup: python3.8
+start: gunicorn cms.wsgi:application
