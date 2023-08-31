@@ -8,34 +8,32 @@ from rest_framework import status
 from rest_framework.response import Response
 from django.db.models import Q
 from .models import CourseType, Event, Institution, Country, Course, Tag, Test
-from .serializers import CountryListSerializer, CourseListSerializer, CourseTypeSerializer, EventSerializer, InstitutionListSerializer, InstitutionSerializer, TagSerializer, TestSerializer
+from .serializers import CountryListSerializer, CourseListSerializer, CourseTypeSerializer, EventSerializer, InstitutionListSerializer, InstitutionSerializer, TagSerializer, TestSerializer, TestTypeSerializer
 
 
 @api_view(["POST"])
 # @permission_classes([IsAuthenticated])
 def create_class_schedule(request):
-    name = request.POST.get('name')
-    test_type = request.POST.get('test_type')
-    # start_date = request.POST.get('start_date')
-    # end_date = request.POST.get('end_date')
-    # start_time = request.POST.get('start_time')
-    # end_time = request.POST.get('end_time')
+    class_name = request.POST.get('name')
+    test = request.POST.get('test_type')
+    start_date = request.POST.get('start_date')
+    end_date = request.POST.get('end_date')
+    start_time = request.POST.get('start_time')
+    end_time = request.POST.get('end_time')
     price = request.POST.get('price')
     max_capacity = request.POST.get('max_capacity')
     instructor = request.POST.get('instructor')
-    classroom = request.POST.get('classroom')
 
     class_schedule = ClassSchedule.objects.create(
-        name=name,
-        test_type=test_type,
-        # start_date=start_date,
-        # end_date=end_date,
-        # start_time=start_time,
-        # end_time=end_time,
+        class_name=class_name,
+        test_type=test,
+        start_date=start_date,
+        end_date=end_date,
+        start_time=start_time,
+        end_time=end_time,
         price=price,
         max_capacity=max_capacity,
         instructor=instructor,
-        classroom=classroom
     )
     class_schedule.save()
     return Response({"success": "Class Schedule created successfully"}, status=status.HTTP_201_CREATED)
@@ -46,6 +44,13 @@ def get_class_schedules(request):
     class_schedules = ClassSchedule.objects.all()
     serializer = ClassScheduleSerializer(class_schedules, many=True)
     return Response({"class_schedules": serializer.data})
+
+
+@api_view(["GET"])
+def get_test_type(request):
+    test_types = ClassSchedule.objects.all()
+    serializer = TestTypeSerializer(test_types, many=True)
+    return Response({"test_types": serializer.data})
 
 
 @api_view(["GET"])
@@ -70,27 +75,25 @@ def update_class_schedule(request):
     except ClassSchedule.DoesNotExist:
         return Response({"error": "ClassSchedule not found."}, status=status.HTTP_404_NOT_FOUND)
 
-    name = request.POST.get('name')
-    test_type = request.POST.get('test_type')
-    # start_date = request.POST.get('start_date')
-    # end_date = request.POST.get('end_date')
-    # start_time = request.POST.get('start_time')
-    # end_time = request.POST.get('end_time')
+    class_name = request.POST.get('name')
+    test = request.POST.get('test_type')
+    start_date = request.POST.get('start_date')
+    end_date = request.POST.get('end_date')
+    start_time = request.POST.get('start_time')
+    end_time = request.POST.get('end_time')
     price = request.POST.get('price')
     max_capacity = request.POST.get('max_capacity')
     instructor = request.POST.get('instructor')
-    classroom = request.POST.get('classroom')
 
-    class_schedule.name = name
-    class_schedule.test_type = test_type
-    # class_schedule.start_date = start_date
-    # class_schedule.end_date = end_date
-    # class_schedule.start_time = start_time
-    # class_schedule.end_time = end_time
+    class_schedule.class_name = class_name
+    class_schedule.test = test
+    class_schedule.start_date = start_date
+    class_schedule.end_date = end_date
+    class_schedule.start_time = start_time
+    class_schedule.end_time = end_time
     class_schedule.price = price
     class_schedule.max_capacity = max_capacity
     class_schedule.instructor = instructor
-    class_schedule.classroom = classroom
 
     class_schedule.save()
 
@@ -110,22 +113,24 @@ def delete_class_schedule(request):
 @api_view(["POST"])
 # @permission_classes([IsAuthenticated])
 def create_test(request):
-    class_schedule_name = request.POST.get('class_schedule')
+    test_type_name = request.POST.get('test_type')
     description = request.POST.get('description')
     test_date = request.POST.get('test_date')
     test_time = request.POST.get('test_time')
+    max_capacity = request.POST.get('max_capacity')
     result_date = request.POST.get('result_date')
 
     try:
-        class_schedule = ClassSchedule.objects.get(name=class_schedule_name)
+        test_type = ClassSchedule.objects.get(test=test_type_name)
     except ClassSchedule.DoesNotExist:
-        return Response({"error": "ClassSchedule not found."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "Test Type not found."}, status=status.HTTP_400_BAD_REQUEST)
 
     test = Test.objects.create(
-        class_schedule=class_schedule,
+        test_type=test_type,
         description=description,
         test_date=test_date,
         test_time=test_time,
+        max_capacity=max_capacity,
         result_date=result_date
     )
     test.save()
@@ -161,21 +166,23 @@ def update_test(request):
     except Test.DoesNotExist:
         return Response({"error": "Test not found."}, status=status.HTTP_404_NOT_FOUND)
 
-    class_schedule_id = request.POST.get('class_schedule_id')
+    test_type_name = request.POST.get('test_type')
     description = request.POST.get('description')
     test_date = request.POST.get('test_date')
     test_time = request.POST.get('test_time')
+    max_capacity = request.POST.get('max_capacity')
     result_date = request.POST.get('result_date')
 
     try:
-        class_schedule = ClassSchedule.objects.get(id=class_schedule_id)
+        test_type = ClassSchedule.objects.get(test=test_type_name)
     except ClassSchedule.DoesNotExist:
-        return Response({"error": "ClassSchedule not found."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "Test Type not found."}, status=status.HTTP_400_BAD_REQUEST)
 
-    test.class_schedule = class_schedule
+    test.test_type = test_type
     test.description = description
     test.test_date = test_date
     test.test_time = test_time
+    test.max_capacity = max_capacity
     test.result_date = result_date
 
     test.save()
@@ -266,9 +273,9 @@ def delete_country(request):
 
 @api_view(["POST"])
 def create_course_type(request):
-    degree = request.POST.get('degree')
+    course_type = request.POST.get('degree')
     
-    course_type = CourseType.objects.create(degree=degree)
+    course_type = CourseType.objects.create(course_type=course_type)
     course_type.save()
     return Response({"success": "Course Type created successfully"}, status=status.HTTP_201_CREATED)
 
@@ -276,7 +283,7 @@ def create_course_type(request):
 @api_view(["GET"])
 def get_course_types(request):
     course_types = CourseType.objects.all()
-    serializer = CourseTypeSerializer(course_types, many=True)  # Assuming you have a serializer for CourseType
+    serializer = CourseTypeSerializer(course_types, many=True)  
     
     return Response({
         "course_types": serializer.data})
@@ -325,13 +332,13 @@ def create_course(request):
     cdegree = request.POST.get('degree') 
 
     description = request.POST.get('description')
-    # course_start_date = request.POST.get('course_start_date')
-    # course_end_date = request.POST.get('course_end_date')
-    # application_deadline = request.POST.get('application_deadline')
+    course_start_date = request.POST.get('course_start_date')
+    course_end_date = request.POST.get('course_end_date')
+    application_deadline = request.POST.get('application_deadline')
     # course_image = request.FILES.get('course_image')
 
     try:
-        degree = CourseType.objects.get(degree=cdegree)
+        degree = CourseType.objects.get(course_type=cdegree)
     except CourseType.DoesNotExist:
         return Response({"error": "Degree not found."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -339,9 +346,9 @@ def create_course(request):
         course_name=course_name,
         degree=degree,
         description=description,
-        # course_start_date=course_start_date,
-        # course_end_date=course_end_date,
-        # application_deadline=application_deadline,
+        course_start_date=course_start_date,
+        course_end_date=course_end_date,
+        application_deadline=application_deadline,
         # course_image=course_image
     )
     course.save()
@@ -380,9 +387,9 @@ def update_course(request):
     course_name = request.POST.get('course_name')
     cdegree = request.POST.get('degree') 
     description = request.POST.get('description')
-    # course_start_date = request.POST.get('course_start_date')
-    # course_end_date = request.POST.get('course_end_date')
-    # application_deadline = request.POST.get('application_deadline')
+    course_start_date = request.POST.get('course_start_date')
+    course_end_date = request.POST.get('course_end_date')
+    application_deadline = request.POST.get('application_deadline')
     # course_image = request.FILES.get('course_image')
 
     try:
@@ -393,9 +400,9 @@ def update_course(request):
     course.course_name = course_name
     course.description = description
     course.degree = degree
-    # course.course_start_date = course_start_date
-    # course.course_end_date = course_end_date
-    # course.application_deadline = application_deadline
+    course.course_start_date = course_start_date
+    course.course_end_date = course_end_date
+    course.application_deadline = application_deadline
     # course.course_image = course_image
 
     course.save()
@@ -420,7 +427,7 @@ def delete_course(request):
 def create_institution(request):
     institution_name = request.POST.get('institution_name')
     country = request.POST.get('interested_country')
-    courses = request.POST.getlist('interested_course') 
+    courses = request.POST.getlist('courses') 
     website = request.POST.get('website')
     email = request.POST.get('email')
     contact = request.POST.get('contact')
@@ -444,7 +451,6 @@ def create_institution(request):
     
     courses_to_add = Course.objects.filter(course_name__in=courses)
     institution.courses.set(courses_to_add)
-    print(courses)
     institution.save()
     return Response({"success": "Institution created successfully"}, status=status.HTTP_201_CREATED)
 
@@ -481,7 +487,7 @@ def update_institution(request):
 
     institution_name = request.POST.get('institution_name')
     country = request.POST.get('intrested_country')
-    courses = request.POST.getlist('intrested_course')  # Assuming multiple courses can be selected
+    courses = request.POST.getlist('interested_course')  
     website = request.POST.get('website')
     email = request.POST.get('email')
     contact = request.POST.get('contact')
@@ -594,9 +600,9 @@ def delete_tag(request):
 def create_event(request):
     name = request.POST.get('name')
     description = request.POST.get('description')
-    # date = request.POST.get('date')
-    # start_time = request.POST.get('start_time')
-    # end_time = request.POST.get('end_time')
+    date = request.POST.get('date')
+    start_time = request.POST.get('start_time')
+    end_time = request.POST.get('end_time')
     location = request.POST.get('location')
     capacity = request.POST.get('capacity')
     event_status = request.POST.get('event_status')
@@ -605,9 +611,9 @@ def create_event(request):
     event = Event.objects.create(
         name=name,
         description=description,
-        # date=date,
-        # start_time=start_time,
-        # end_time=end_time,
+        date=date,
+        start_time=start_time,
+        end_time=end_time,
         location=location,
         capacity=capacity,
         event_status=event_status
@@ -651,9 +657,9 @@ def update_event(request):
 
     name = request.POST.get('name')
     description = request.POST.get('description')
-    # date = request.POST.get('date')
-    # start_time = request.POST.get('start_time')
-    # end_time = request.POST.get('end_time')
+    date = request.POST.get('date')
+    start_time = request.POST.get('start_time')
+    end_time = request.POST.get('end_time')
     location = request.POST.get('location')
     capacity = request.POST.get('capacity')
     event_status = request.POST.get('event_status')
@@ -661,9 +667,9 @@ def update_event(request):
 
     event.name = name
     event.description = description
-    # event.date = date
-    # event.start_time = start_time
-    # event.end_time = end_time
+    event.date = date
+    event.start_time = start_time
+    event.end_time = end_time
     event.location = location
     event.capacity = capacity
     event.event_status = event_status

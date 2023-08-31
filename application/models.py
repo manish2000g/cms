@@ -14,9 +14,9 @@ class Applicant(models.Model):
         ('Created', 'Created'),
         ('Submitted', 'Submitted'),
         ('Confirmed', 'Confirmed'),
-        ('Visa Created', 'Visa Created'),
-        ('Visa Submitted', 'Visa Submitted'),
-        ('Docs Requested', 'Docs Requested'),
+        ('Visa_Created', 'Visa_Created'),
+        ('Visa_Submitted', 'Visa_Submitted'),
+        ('Docs_Requested', 'Docs_Requested'),
         ('Granted', 'Granted'),
         ('Enrolled', 'Enrolled')
     )

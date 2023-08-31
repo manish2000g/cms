@@ -8,8 +8,15 @@ class ClassScheduleSerializer(serializers.ModelSerializer):
         model = ClassSchedule
         fields = '__all__'
 
+
+class TestTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClassSchedule
+        fields = ('test',)
+
+
 class TestSerializer(serializers.ModelSerializer):
-    class_schedule = serializers.StringRelatedField()
+    test_type = serializers.StringRelatedField()
     class Meta:
         model = Test
         fields = '__all__'
@@ -22,6 +29,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     courses = serializers.StringRelatedField()
+    tags = TagSerializer(many=True)
 
     class Meta:
         model = Event
@@ -51,7 +59,7 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = ('course_name',)
 
 class CourseListSerializer(serializers.ModelSerializer):
-    degreee = serializers.StringRelatedField()
+    degree = serializers.StringRelatedField()
     class Meta:
         model = Course
         fields = '__all__'
@@ -63,7 +71,7 @@ class InstitutionSerializer(serializers.ModelSerializer):
 
 class InstitutionListSerializer(serializers.ModelSerializer):
     country = serializers.StringRelatedField()
-    courses = serializers.StringRelatedField()
+    courses = CourseSerializer(many=True)
     class Meta:
         model = Institution
         fields = '__all__'

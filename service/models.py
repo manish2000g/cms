@@ -24,61 +24,54 @@ class Service(models.Model):
         return self.name
     
 class ClassSchedule(models.Model):
-    TEST_CHOICES = (
-        ('IELTS', 'IELTS'),
-        ('PTE', 'PTE'),
-        ('TOEFL', 'TOEFL'),
-        ('DuoLingo', 'DuoLingo')
-    )
-
-    name = models.CharField(max_length=255)
-    test_type = models.CharField(max_length=10, choices=TEST_CHOICES)
-    # start_date = models.DateField()
-    # end_date = models.DateField()
-    # start_time = models.TimeField()
-    # end_time = models.TimeField()
+    test = models.CharField(max_length=10)
+    class_name = models.CharField(max_length=255)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
     price = models.PositiveIntegerField()
     max_capacity = models.PositiveIntegerField()
     instructor = models.CharField(max_length=100)
-    classroom = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return self.test 
 
 
 class Test(models.Model):
-    class_schedule = models.ForeignKey(ClassSchedule, on_delete=models.CASCADE)
+    test_type = models.ForeignKey(ClassSchedule, on_delete=models.CASCADE, related_name='test_type')
     description = models.TextField()
     test_date = models.DateField()
     test_time = models.TimeField()
+    max_capacity = models.PositiveIntegerField()
     result_date = models.DateField()
 
     def __str__(self):
-        return f"{self.class_schedule.test_type} Test for {self.class_schedule.name}"
+        return f"{self.test_type.test} Test for {self.test_type.class_name}"
 
 
 class Country(models.Model):
-    country_name = models.CharField(max_length=100)
+    country_name = models.CharField(max_length=100, unique=True)
     description = RichTextField(blank=True)
 
     def __str__(self):
         return self.country_name
   
 class CourseType(models.Model):
-    degree = models.CharField(max_length=100)
+    course_type = models.CharField(max_length=100)
     def __str__(self):
-        return self.degree
+        return self.course_type
 
 
 class Course(models.Model):
     course_name = models.CharField(max_length=255)
-    degree = models.ForeignKey(CourseType, on_delete=models.CASCADE, related_name='degreee')
+    degree = models.ForeignKey(CourseType, on_delete=models.CASCADE, related_name='degree')
     description = RichTextField(blank=True)
-    # course_start_date = models.DateField()
-    # course_end_date = models.DateField()
-    # application_deadline = models.DateField()
+    course_start_date = models.DateField()
+    course_end_date = models.DateField()
+    application_deadline = models.DateField()
     # course_image = models.ImageField(upload_to='course_images/', blank=True)
 
     def __str__(self):
@@ -141,13 +134,13 @@ class Event(models.Model):
     )
     name = models.CharField(max_length=255)
     description = RichTextField()
-    # date = models.DateField()
-    # start_time = models.TimeField()
-    # end_time = models.TimeField()
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
     location = models.CharField(max_length=255)
     capacity = models.PositiveIntegerField()
     event_status = models.CharField(max_length=15, choices=status_choices, default='Upcoming')
-    # tags = models.ManyToManyField(Tag)
+    # tags = models.ManyToManyField(Tag, related_name='tags')
 
     def __str__(self):
         return self.name
