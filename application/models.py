@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User  # You can use your custom user model if applicable
 from django.db import models
 
 from service.models import Country, Course, Institution
@@ -53,13 +54,24 @@ class Applicant(models.Model):
     other_language = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     interested_country = models.ForeignKey(Country, on_delete=models.CASCADE,null=True, blank=True)
     interested_course = models.ForeignKey(Course, on_delete=models.CASCADE,null=True, blank=True)
-    documents = models.ManyToManyField(Document)
+    documents = models.ManyToManyField(Document, related_name='documents', blank=True)
     interested_institution = models.ForeignKey(Institution, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
         return f"Application of {self.full_name}"
+    
+
+class Quote(models.Model):
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name='applicant')
+    quote = models.TextField()
+    purpose = models.CharField(max_length=100)
+    due_date = models.DateField(blank=True)
+    amount = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"Quote for {self.applicant.full_name} - {self.purpose}"
 
 
 class Payment(models.Model):
@@ -68,7 +80,7 @@ class Payment(models.Model):
         ('Completed', 'Completed')
     )
 
-    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE)
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE ,related_name='applicant_payment')
     description = models.CharField(max_length=45)
     total_amount = models.PositiveIntegerField()
     remaining_amount = models.PositiveIntegerField()
@@ -78,6 +90,17 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"Payment for {self.applicant.full_name}"
+
+
+class Invoice(models.Model):
+    applicant = models.ForeignKey(Applicant, on_delete=models.CASCADE, related_name='applicant_invoice')
+    invoice_number = models.CharField(max_length=50, unique=True)
+    issue_date = models.DateField()
+    amount = models.PositiveIntegerField()
+    # remaining_amount = models.PositiveIntegerField()
+    description = models.TextField()
+    def __str__(self):
+        return f"Invoice #{self.invoice_number} - {self.applicant.full_name}"
 
 
 class Commission(models.Model):

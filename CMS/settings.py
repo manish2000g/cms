@@ -32,10 +32,11 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-CSRF_TRUSTED_ORIGINS =['https://11ea-103-186-197-230.ngrok-free.app', 'http://localhost:8081', 'https://seashell-app-7ctt9.ondigitalocean.app',]
+CSRF_TRUSTED_ORIGINS = ['https://619c-111-119-49-96.ngrok-free.app',
+                        'http://localhost:8081', 'https://seashell-app-7ctt9.ondigitalocean.app',]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8081", 'https://11ea-103-186-197-230.ngrok-free.app', 'https://seashell-app-7ctt9.ondigitalocean.app',
+    "http://localhost:8081", 'https://619c-111-119-49-96.ngrok-free.app', 'https://seashell-app-7ctt9.ondigitalocean.app',
 ]
 
 CORS_ALLOW_METHODS = [
@@ -86,7 +87,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+
 ]
 
 ROOT_URLCONF = 'CMS.urls'
@@ -207,7 +208,7 @@ JAZZMIN_SETTINGS = {
     # Copyright on the footer
     "copyright": "CMS",
     # List of model admins to search from the search bar, search bar omitted if excluded
-    # If you want to use a single search field you dont need to use a list, you can use a simple string 
+    # If you want to use a single search field you dont need to use a list, you can use a simple string
     "search_model": ["auth.User", "auth.Group"],
     # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
     "user_avatar": None,
@@ -259,4 +260,4 @@ EMAIL_HOST = 'smtp-relay.sendinblue.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'hreedhann9@gmail.com'
-EMAIL_HOST_PASSWORD = 'xsmtpsib-cb9e8e73500c2c2a4ec8f2fd17fe8c47114779f563b050c82af07bc22b721b60-X7wIrxEJ3Z6B0bOC'
+EMAIL_HOST_PASSWORD = 'xsmtpsib-cb9e8e73500c2c2a4ec8f2fd17fe8c47114779f563b050c82af07bc22b721b60-sSCRgqIjYpvJXr1P'
