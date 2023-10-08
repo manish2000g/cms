@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from service.models import ClassSchedule, Country, Course, CourseType, Enquiry, Event, Institution, Service, Tag, Test
+from service.models import ClassSchedule, Country, Course, CourseType, EnglishProfficiency, Enquiry, Event, Institution, Service, Tag, Test
 
 # Register your models here.
 
@@ -14,3 +14,4 @@ admin.site.register(Tag)
 admin.site.register(Event)
 admin.site.register(ClassSchedule)
 admin.site.register(Test)
+admin.site.register(EnglishProfficiency)

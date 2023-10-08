@@ -153,12 +153,14 @@ def get_applicants(request):
     })
 
 # get applicant name for quote
+
+
 @api_view(["GET"])
 def get_applicant_names(request):
     applicant = Applicant.objects.all()
     serializer = ApplicantNameSerializer(applicant, many=True)
     return Response({
-        'applicants_names': serializer.data
+        'applicant': serializer.data
     })
 
 
@@ -292,7 +294,7 @@ def create_quote(request):
     quote.save()
 
     subject = 'Quote Created'
-    message = f'Hello {applicant.full_name},\n\nYour quote for the purpose of {purpose} has been created successfully with {amount} amount and due date for {due_date}.'
+    message = f'Hello {applicant.full_name},\n\nYour quote for the purpose of {purpose} has been created successfully with "RS.{amount}" amount and due date for {due_date}.'
     from_email = 'hreedhann9@gmail.com'
     recipient_list = [applicant.email]
 
@@ -419,7 +421,7 @@ def get_payment(request):
 
     try:
         payment = Payment.objects.filter(applicant=applicant)
-        serializer = PaymentSerializer(payment)
+        serializer = PaymentSerializer(payment, many=True)
         return Response(serializer.data)
     except Payment.DoesNotExist:
         return Response({"error": "Payment not found."}, status=status.HTTP_404_NOT_FOUND)

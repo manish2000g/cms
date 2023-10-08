@@ -32,11 +32,11 @@ ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-CSRF_TRUSTED_ORIGINS = ['https://619c-111-119-49-96.ngrok-free.app',
+CSRF_TRUSTED_ORIGINS = ['https://0cf9-45-64-160-38.ngrok-free.app',
                         'http://localhost:8081', 'https://seashell-app-7ctt9.ondigitalocean.app',]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8081", 'https://619c-111-119-49-96.ngrok-free.app', 'https://seashell-app-7ctt9.ondigitalocean.app',
+    "http://localhost:8081", 'https://0cf9-45-64-160-38.ngrok-free.app', 'https://seashell-app-7ctt9.ondigitalocean.app',
 ]
 
 CORS_ALLOW_METHODS = [
@@ -73,7 +73,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'account',
     'ckeditor',
-    'provider',
     'application',
     'service',
 ]
@@ -260,4 +259,4 @@ EMAIL_HOST = 'smtp-relay.sendinblue.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'hreedhann9@gmail.com'
-EMAIL_HOST_PASSWORD = 'xsmtpsib-cb9e8e73500c2c2a4ec8f2fd17fe8c47114779f563b050c82af07bc22b721b60-sSCRgqIjYpvJXr1P'
+EMAIL_HOST_PASSWORD = 'xsmtpsib-cb9e8e73500c2c2a4ec8f2fd17fe8c47114779f563b050c82af07bc22b721b60-Sxp1E73a6HskNMLX'
